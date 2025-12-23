@@ -12,7 +12,7 @@ using RestaurantManager.Context;
 namespace RestaurantManager.Data.Migrations
 {
     [DbContext(typeof(RestaurantManagerContext))]
-    [Migration("20251223155429_Init")]
+    [Migration("20251223165118_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -42,7 +42,6 @@ namespace RestaurantManager.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Prize")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -81,7 +80,6 @@ namespace RestaurantManager.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -97,10 +95,23 @@ namespace RestaurantManager.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LogoPath")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("MenuId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameColor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
 

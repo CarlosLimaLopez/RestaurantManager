@@ -5,6 +5,7 @@
 
     public interface IRestaurantRepository
     {
+        Task<Restaurant?> GetRestaurantByPath(string path);
         Task<Restaurant?> GetRestaurantById(Guid id);
         Task<Restaurant[]> GetRestaurants();
     }
@@ -17,6 +18,13 @@
         {
             _restaurantManagerContext = restaurantManagerContext;
         }
+
+        public Task<Restaurant?> GetRestaurantByPath(string path)
+            => _restaurantManagerContext.Restaurants
+                .Include(r => r.Menu)
+                    .ThenInclude(m => m.Sections)
+                        .ThenInclude(ms => ms.Dishes)
+                .FirstOrDefaultAsync(r => r.Path == path);
 
         public Task<Restaurant?> GetRestaurantById(Guid id) 
             => _restaurantManagerContext.Restaurants

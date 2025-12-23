@@ -6,7 +6,7 @@ namespace RestaurantManager.Restaurant
     {
         private MenuSection() { }
 
-        public MenuSection(string name, IEnumerable<Dish> dishes, string note)
+        public MenuSection(string name, IEnumerable<Dish> dishes, string? note)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -18,6 +18,6 @@ namespace RestaurantManager.Restaurant
         public Guid Id { get; init; }
         public string Name { get; set; }
         public IEnumerable<Dish> Dishes { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
     }
 }

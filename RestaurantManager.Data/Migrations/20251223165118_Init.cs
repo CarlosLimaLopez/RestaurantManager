@@ -29,7 +29,7 @@ namespace RestaurantManager.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Note = table.Column<string>(type: "text", nullable: false),
+                    Note = table.Column<string>(type: "text", nullable: true),
                     MenuId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -49,7 +49,11 @@ namespace RestaurantManager.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    MenuId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    MenuId = table.Column<Guid>(type: "uuid", nullable: false),
+                    NameColor = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    LogoPath = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,7 +73,7 @@ namespace RestaurantManager.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Prize = table.Column<string>(type: "text", nullable: false),
+                    Prize = table.Column<string>(type: "text", nullable: true),
                     MenuSectionId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>

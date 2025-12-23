@@ -40,7 +40,7 @@ namespace RestaurantManager.Context
                     new Dish("Entrecot de Ternera", "22.00", "Jugoso entrecot de ternera cocinado al punto deseado"),
                     new Dish("Lasaña Vegetariana", "15.00", "Capas de pasta con verduras de temporada y bechamel cremosa")
                 ],
-                note: "Todos los platos principales se sirven con una guarnición de verduras asadas."
+                "Todos los platos principales se sirven con una guarnición de verduras asadas."
             );
 
             var postres = new MenuSection(
@@ -49,7 +49,7 @@ namespace RestaurantManager.Context
                     new Dish("Coulant de Chocolate", "6.00", "Bizcocho de chocolate caliente con corazón fundido"),
                     new Dish("Tarta de Queso", "5.50", "Clásica tarta de queso cremosa con salsa de frutos rojos")
                 ],
-                note: "Postres caseros elaborados a diario."
+                "Postres caseros elaborados a diario."
             );
 
             var bebidas = new MenuSection(
@@ -58,7 +58,7 @@ namespace RestaurantManager.Context
                     new Dish("Agua Mineral", "2.50", "Agua con gas o sin gas"),
                     new Dish("Vino Tinto de la Casa", "4.00", "Copa de nuestro vino tinto seleccionado")
                 ],
-                note: "Pregunta a nuestro personal por la carta de vinos."
+                "Pregunta a nuestro personal por la carta de vinos."
             );
 
             var menu = new Menu(
@@ -68,10 +68,16 @@ namespace RestaurantManager.Context
                     postres,
                     bebidas
                 ],
-                note: "Los precios incluyen IVA. Por favor, informa al personal de cualquier alergia."
+                "Los precios incluyen IVA. Por favor, informa al personal de cualquier alergia."
             );
 
-            var restaurant = new Restaurant("Casa Umami", menu);
+            var restaurant = new Restaurant(
+                "Casa Umami", 
+                "casa-umami", 
+                menu,
+                "#59151D",
+                "Bienvenidos a Casa Umami, donde cada plato es una experiencia culinaria única.",
+                "images/logos/casa-umami-logo.png");
 
             return restaurant;
         }
