@@ -42,5 +42,6 @@
     [Parameter]
     public string? NameColor { get; set; }
 
+
     private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameColor) ? "yellow" : NameColor)}";
 }
