@@ -6,7 +6,7 @@ namespace RestaurantManager.Restaurant
     {
         private Dish() { }
 
-        public Dish(string name, string prize, string? description = null)
+        public Dish(string name, string? prize, string? description = null)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -17,7 +17,7 @@ namespace RestaurantManager.Restaurant
         [Key]
         public Guid Id { get; init; }
         public string Name { get; set; }
-        public string? Description { get; set; }
-        public string Prize { get; set; }
+        public string? Description { get; set; }    
+        public string? Prize { get; set; }
     }
 }

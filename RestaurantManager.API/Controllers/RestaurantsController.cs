@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+using System.Net.WebSockets;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RestaurantManager.Restaurant
 {
@@ -21,11 +23,16 @@ namespace RestaurantManager.Restaurant
             return Ok(restaurant);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Restaurant>> GetRestaurant([FromRoute] Guid id)
+        [HttpGet("{identifier}")]
+        public async Task<ActionResult<Restaurant>> GetRestaurant([FromRoute] string identifier)
         {
-            var restaurant = await _restaurantService.GetRestaurant(id);
+            Restaurant? restaurant;
 
+            if (Guid.TryParse(identifier, out var guid))
+                restaurant = await _restaurantService.GetRestaurant(guid);
+            else
+                restaurant = await _restaurantService.GetRestaurant(identifier);
+            
             return Ok(restaurant);
         }
     }
