@@ -1,0 +1,46 @@
+﻿<MudPaper Elevation="0" Class="pa-4">
+
+    <MudGrid AlignItems="AlignItems.Center">
+
+        <MudItem xs="12" sm="6">
+            <MudText Class="restaurant-name" Style="@NameStyle">
+                @Name
+            </MudText>
+
+            @if (!string.IsNullOrWhiteSpace(Description))
+            {
+                <MudText Class="restaurant-description">
+                    @Description
+                </MudText>
+            }
+        </MudItem>
+
+        <MudItem xs="0" sm="3">
+        </MudItem>
+
+        @if (!string.IsNullOrWhiteSpace(LogoPath))
+        {
+            <MudItem xs="12" sm="3" Class="d-flex justify-center justify-sm-end mt-2 mt-sm-0">
+                <MudImage Src="@LogoPath" Class="logo" />
+            </MudItem>
+        }
+
+    </MudGrid>
+
+</MudPaper>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Name { get; set; } = default!;
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public string? LogoPath { get; set; }
+
+    [Parameter]
+    public string? NameColor { get; set; }
+
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameColor) ? "yellow" : NameColor)}";
+}

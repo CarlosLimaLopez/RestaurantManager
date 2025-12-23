@@ -1,0 +1,23 @@
+﻿<MudPaper Elevation="0" Class="pa-4">
+
+    <RestaurantHeader Name="@Restaurant.Name"
+                      NameColor= "@Restaurant.NameColor"
+                      Description="@Restaurant.Description"
+                      LogoPath="@Restaurant.LogoPath" />
+
+    @foreach (var menuSection in @Restaurant.Menu.Sections)
+    {
+        <MenuSection Name="@(menuSection.Name)" 
+                     Dishes="@(menuSection.Dishes)" 
+                     Note="@(menuSection.Note)" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Restaurant.Menu.Note))
+    {
+        <MudText Class="menu-note">
+            @Restaurant.Menu.Note
+        </MudText>
+    }
+
+
+</MudPaper>

@@ -1,0 +1,17 @@
+﻿@using RestaurantManager.Interface.DTOs.Response
+
+<MudGrid AlignItems="AlignItems.Center" Class="mb-2">
+    <MudItem xs="7">
+        <MudText Class="dish-name">@Dish.Name</MudText>
+        <MudText Class="dish-description">@Dish.Description</MudText>
+    </MudItem>
+
+    <MudItem xs="5" Class="d-flex justify-end align-center">
+        <MudText Class="dish-price">@Dish.Prize</MudText>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter, EditorRequired]
+    public DishResponse Dish { get; set; } = default!;
+}

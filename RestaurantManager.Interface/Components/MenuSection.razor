@@ -1,0 +1,32 @@
+﻿@using RestaurantManager.Interface.DTOs.Response
+
+<MudPaper Elevation="0" Class="pa-3 mb-4">
+
+    <MudText Class="mb-3 menu-section-name">
+        @Name
+    </MudText>
+
+    @foreach (var dish in Dishes)
+    {
+        <MenuDish Dish="@dish" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Note))
+    {
+        <MudText Class="mt-1 menu-section-note">
+            @Note
+        </MudText>
+    }
+
+</MudPaper>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Name { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public List<DishResponse> Dishes { get; set; } = new List<DishResponse>();
+
+    [Parameter]
+    public string? Note { get; set; }
+}
