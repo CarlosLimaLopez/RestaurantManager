@@ -13,7 +13,11 @@ namespace RestaurantManager.Data
             IConfiguration configuration)
         {
             services.AddDbContext<RestaurantManagerContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("Database")));
+                options.UseNpgsql(configuration.GetConnectionString("Database")));
+
+            //services.AddDbContext<RestaurantManagerContext>(options =>
+            //    options.UseSqlite(configuration.GetConnectionString("Database")));
+
             return services;
         }
         public static IServiceCollection AddRepositories(this IServiceCollection services)
