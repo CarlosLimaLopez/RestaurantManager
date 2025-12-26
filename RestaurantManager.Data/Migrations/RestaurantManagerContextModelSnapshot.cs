@@ -54,11 +54,21 @@ namespace RestaurantManager.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Note")
-                        .IsRequired()
+                    b.Property<DateOnly>("ActivateAt")
+                        .HasColumnType("date");
+
+                    b.Property<string>("NameSectionColor")
                         .HasColumnType("text");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Menus");
                 });
@@ -79,6 +89,9 @@ namespace RestaurantManager.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("text");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MenuId");
@@ -95,11 +108,11 @@ namespace RestaurantManager.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("LogoPath")
+                    b.Property<string>("DescriptionColor")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("MenuId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("LogoPath")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -114,9 +127,6 @@ namespace RestaurantManager.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId")
-                        .IsUnique();
-
                     b.ToTable("Restaurants");
                 });
 
@@ -128,23 +138,21 @@ namespace RestaurantManager.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("RestaurantManager.Restaurant.Menu", b =>
+                {
+                    b.HasOne("RestaurantManager.Restaurant.Restaurant", null)
+                        .WithMany("Menus")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RestaurantManager.Restaurant.MenuSection", b =>
                 {
                     b.HasOne("RestaurantManager.Restaurant.Menu", null)
                         .WithMany("Sections")
                         .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RestaurantManager.Restaurant.Restaurant", b =>
-                {
-                    b.HasOne("RestaurantManager.Restaurant.Menu", "Menu")
-                        .WithOne()
-                        .HasForeignKey("RestaurantManager.Restaurant.Restaurant", "MenuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Menu");
                 });
 
             modelBuilder.Entity("RestaurantManager.Restaurant.Menu", b =>
@@ -155,6 +163,11 @@ namespace RestaurantManager.Data.Migrations
             modelBuilder.Entity("RestaurantManager.Restaurant.MenuSection", b =>
                 {
                     b.Navigation("Dishes");
+                });
+
+            modelBuilder.Entity("RestaurantManager.Restaurant.Restaurant", b =>
+                {
+                    b.Navigation("Menus");
                 });
 #pragma warning restore 612, 618
         }

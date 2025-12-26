@@ -111,7 +111,6 @@ code {
 .menu-section-name {
     font-weight: bold !important;
     font-size: 1.25rem !important;
-    color: #C1272D !important;
     border-bottom: 2px solid #eee !important;
     padding-bottom: 0.25rem !important;
     margin-bottom: 1rem !important;
@@ -127,15 +126,48 @@ code {
 
 .dish-name {
     font-weight: 600 !important;
-    font-size: 1rem !important;
+    font-size: 17px !important;
 }
 
 .dish-description {
     color: #666 !important;
-    font-size: 0.875rem !important;
+    font-size: 15px !important;
 }
 
 .dish-price {
     font-weight: 600 !important;
-    font-size: 1rem !important;
+    font-size: 17px !important;
+}
+
+.bote-loader {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+    .bote-loader div {
+        width: 20px;
+        height: 20px;
+        background: #1976d2;
+        border-radius: 50%;
+        animation: bounce 1.2s infinite;
+    }
+
+        .bote-loader div:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bote-loader div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-20px);
+    }
 }

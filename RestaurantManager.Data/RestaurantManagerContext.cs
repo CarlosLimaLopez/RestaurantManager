@@ -23,9 +23,9 @@
 
             modelBuilder.Entity<Restaurant>(restaurant =>
             {
-                restaurant.HasOne(r => r.Menu)
+                restaurant.HasMany(r => r.Menus)
                     .WithOne()
-                    .HasForeignKey<Restaurant>("MenuId")
+                    .HasForeignKey("RestaurantId")
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Cascade);
             });

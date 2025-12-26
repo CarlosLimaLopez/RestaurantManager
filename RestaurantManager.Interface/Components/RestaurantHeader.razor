@@ -1,16 +1,18 @@
-﻿<MudPaper Elevation="0" Class="pa-4">
+﻿@using RestaurantManager.Interface.DTOs.Response
+
+<MudPaper Elevation="0" Class="pa-4">
 
     <MudGrid AlignItems="AlignItems.Center">
 
         <MudItem xs="12" sm="6">
             <MudText Class="restaurant-name" Style="@NameStyle">
-                @Name
+                @RestaurantHeaderDto.Name
             </MudText>
 
-            @if (!string.IsNullOrWhiteSpace(Description))
+            @if (!string.IsNullOrWhiteSpace(@RestaurantHeaderDto.Description))
             {
-                <MudText Class="restaurant-description">
-                    @Description
+                <MudText Class="restaurant-description" Style="@NameStyle">
+                    @RestaurantHeaderDto.Description
                 </MudText>
             }
         </MudItem>
@@ -18,10 +20,10 @@
         <MudItem xs="0" sm="3">
         </MudItem>
 
-        @if (!string.IsNullOrWhiteSpace(LogoPath))
+        @if (!string.IsNullOrWhiteSpace(RestaurantHeaderDto.LogoPath))
         {
             <MudItem xs="12" sm="3" Class="d-flex justify-center justify-sm-end mt-2 mt-sm-0">
-                <MudImage Src="@LogoPath" Class="logo" />
+                <MudImage Src="@RestaurantHeaderDto.LogoPath" Class="logo" />
             </MudItem>
         }
 
@@ -31,19 +33,10 @@
 
 @code {
     [Parameter, EditorRequired]
-    public string Name { get; set; } = default!;
+    public RestaurantResponse RestaurantHeaderDto { get; set; } = default!;
 
-    [Parameter]
-    public string? Description { get; set; }
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(RestaurantHeaderDto.NameColor) ? "inherit" : RestaurantHeaderDto.NameColor)}";
 
-    [Parameter]
-    public string? LogoPath { get; set; }
+    private string DescriptionStyle => $"color:{(string.IsNullOrWhiteSpace(RestaurantHeaderDto.DescriptionColor) ? "inherit" : RestaurantHeaderDto.DescriptionColor)}";
 
-    [Parameter]
-    public string? NameColor { get; set; }
-
-    public string? DescriptionColor { get; set; }
-
-    //dummy comment
-    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameColor) ? "yellow" : NameColor)}";
 }
