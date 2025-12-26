@@ -1,0 +1,24 @@
+﻿<MudPaper Elevation="0" Class="pa-4">
+    @if (@Restaurant != null)
+    {
+        <RestaurantHeader RestaurantHeaderDto="@Restaurant" />
+
+        if(Restaurant.ActiveMenu != null)
+        {
+            @foreach (var menuSection in @Restaurant.ActiveMenu.Sections)
+            {
+                <MenuSection 
+                    MenuSectionDto="@(menuSection)" 
+                    NameSectionColor="@Restaurant.ActiveMenu.NameSectionColor" 
+                    />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Restaurant.ActiveMenu.Note))
+            {
+                <MudText Class="menu-note">
+                    @Restaurant.ActiveMenu.Note
+                </MudText>
+            }
+        }
+    }
+</MudPaper>

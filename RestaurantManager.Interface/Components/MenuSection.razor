@@ -2,19 +2,19 @@
 
 <MudPaper Elevation="0" Class="pa-3 mb-4">
 
-    <MudText Class="mb-3 menu-section-name">
-        @Name
+    <MudText Class="mb-3 menu-section-name" Style="@NameStyle">
+        @MenuSectionDto.Name
     </MudText>
 
-    @foreach (var dish in Dishes)
+    @foreach (var dish in @MenuSectionDto.Dishes)
     {
-        <MenuDish Dish="@dish" />
+        <MenuDish MenuDishDto="@dish" />
     }
 
-    @if (!string.IsNullOrWhiteSpace(Note))
+    @if (!string.IsNullOrWhiteSpace(@MenuSectionDto.Note))
     {
         <MudText Class="mt-1 menu-section-note">
-            @Note
+            @MenuSectionDto.Note
         </MudText>
     }
 
@@ -22,11 +22,10 @@
 
 @code {
     [Parameter, EditorRequired]
-    public string Name { get; set; } = default!;
+    public MenuSectionResponse MenuSectionDto { get; set; } = default!;
 
     [Parameter, EditorRequired]
-    public List<DishResponse> Dishes { get; set; } = new List<DishResponse>();
+    public string? NameSectionColor { get; set; } = default!;
 
-    [Parameter]
-    public string? Note { get; set; }
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameSectionColor) ? "inherit" : NameSectionColor)}";
 }

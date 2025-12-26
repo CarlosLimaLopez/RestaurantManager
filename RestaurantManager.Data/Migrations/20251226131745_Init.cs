@@ -12,15 +12,41 @@ namespace RestaurantManager.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Restaurants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    NameColor = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    DescriptionColor = table.Column<string>(type: "text", nullable: true),
+                    LogoPath = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Restaurants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Note = table.Column<string>(type: "text", nullable: false)
+                    ActivateAt = table.Column<DateOnly>(type: "date", nullable: false),
+                    Note = table.Column<string>(type: "text", nullable: true),
+                    NameSectionColor = table.Column<string>(type: "text", nullable: true),
+                    RestaurantId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Menus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Menus_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -29,6 +55,7 @@ namespace RestaurantManager.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "text", nullable: true),
                     MenuId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -37,29 +64,6 @@ namespace RestaurantManager.Data.Migrations
                     table.PrimaryKey("PK_MenuSections", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MenuSections_Menus_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Restaurants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Path = table.Column<string>(type: "text", nullable: false),
-                    MenuId = table.Column<Guid>(type: "uuid", nullable: false),
-                    NameColor = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    LogoPath = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Restaurants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Restaurants_Menus_MenuId",
                         column: x => x.MenuId,
                         principalTable: "Menus",
                         principalColumn: "Id",
@@ -93,15 +97,14 @@ namespace RestaurantManager.Data.Migrations
                 column: "MenuSectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Menus_RestaurantId",
+                table: "Menus",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MenuSections_MenuId",
                 table: "MenuSections",
                 column: "MenuId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Restaurants_MenuId",
-                table: "Restaurants",
-                column: "MenuId",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -111,13 +114,13 @@ namespace RestaurantManager.Data.Migrations
                 name: "Dishes");
 
             migrationBuilder.DropTable(
-                name: "Restaurants");
-
-            migrationBuilder.DropTable(
                 name: "MenuSections");
 
             migrationBuilder.DropTable(
                 name: "Menus");
+
+            migrationBuilder.DropTable(
+                name: "Restaurants");
         }
     }
 }

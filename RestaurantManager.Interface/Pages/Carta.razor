@@ -1,0 +1,15 @@
+﻿@page "/carta/{restauranteName}"
+
+@using RestaurantManager.Interface.Components
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <RestaurantMenu RestauranteName="@restauranteName" />
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string restauranteName { get; set; } = string.Empty;
+}
+
+
+
