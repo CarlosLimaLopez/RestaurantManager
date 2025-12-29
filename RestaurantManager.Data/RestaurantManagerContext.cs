@@ -1,5 +1,6 @@
 ﻿namespace RestaurantManager.Context
 {
+    using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
     using Restaurant;
 
     /// <summary>
@@ -43,6 +44,17 @@
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<Dish>(dish =>
+            {
+                var allergensConverter = new ValueConverter<IEnumerable<AllergenType>, string>(
+                    v => string.Join(",", v.Select(a => a.ToString())),
+                    v => v.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                          .Select(a => Enum.Parse<AllergenType>(a))
+                );
+
+                dish.Property(d => d.Allergens).HasConversion(allergensConverter);
+            });                
         }
     }
 }
