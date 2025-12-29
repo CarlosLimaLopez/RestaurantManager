@@ -1,8 +1,12 @@
 ﻿@page "/"
 @using RestaurantManager.Interface.Components
+@inject NavigationManager Navigation
 
 <MudContainer MaxWidth="MaxWidth.Large">
     Home
+   <MudButton OnClick="@(() => Navigation.NavigateTo("/carta/la-maura"))">
+        Ir a La Maura
+    </MudButton>
 </MudContainer>
 
 
