@@ -12,7 +12,7 @@ using RestaurantManager.Context;
 namespace RestaurantManager.Data.Migrations
 {
     [DbContext(typeof(RestaurantManagerContext))]
-    [Migration("20251226131745_Init")]
+    [Migration("20251229103331_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -31,6 +31,10 @@ namespace RestaurantManager.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Allergens")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -40,6 +44,9 @@ namespace RestaurantManager.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Prize")
                         .HasColumnType("text");

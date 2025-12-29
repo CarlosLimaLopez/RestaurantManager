@@ -76,6 +76,8 @@ namespace RestaurantManager.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false),
+                    Allergens = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Prize = table.Column<string>(type: "text", nullable: true),
                     MenuSectionId = table.Column<Guid>(type: "uuid", nullable: true)

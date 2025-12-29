@@ -1,9 +1,10 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
-using RestaurantManager.Interface.DTOs.Response;
 
 namespace RestaurantManager.Interface.Components
 {
+    using Restaurant;
+
     public partial class RestaurantMenu : ComponentBase
     {
         [Inject]
@@ -18,8 +19,13 @@ namespace RestaurantManager.Interface.Components
         {
             Restaurant = await GetRestaurant(CancellationToken.None);
 
-            if (Restaurant != null)
+            if (Restaurant?.ActiveMenu != null)
+            {
                 Restaurant.ActiveMenu.Sections = Restaurant.ActiveMenu.Sections.OrderBy(s => s.Order).ToList();
+
+                foreach (var section in Restaurant.ActiveMenu.Sections)
+                    section.Dishes = section.Dishes.OrderBy(d => d.Order).ToList();
+            }
         }
 
         private Task<RestaurantResponse?> GetRestaurant(CancellationToken cancellationToken)

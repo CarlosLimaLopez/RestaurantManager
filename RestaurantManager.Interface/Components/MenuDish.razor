@@ -1,21 +1,33 @@
-﻿@using RestaurantManager.Interface.DTOs.Response
+﻿@using RestaurantManager.Restaurant
 
 <MudGrid AlignItems="AlignItems.Center" Class="mb-2">
-    <MudItem xs="9">
-        <MudText Class="dish-name">@MenuDishDto.Name</MudText>
-        @if (!string.IsNullOrWhiteSpace(MenuDishDto.Description))
-        {
-            <MudText Class="dish-description">@MenuDishDto.Description</MudText>
-        }
-        
+    <MudItem xs="9" Class="mt-2">
+        <div style="display:flex; align-items:center; gap:4px;">
+            <MudText Class="dish-name" Display="Inline">@MenuDishDto.Name</MudText>
+
+            @if (MenuDishDto.Allergens != null)
+            {
+                @foreach (var allergen in MenuDishDto.Allergens)
+                {
+                    <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Type.ToString()" />
+                }
+            }
+        </div>
     </MudItem>
 
-    <MudItem xs="3" Class="d-flex justify-end align-center">
+    <MudItem xs="3" Class="d-flex justify-end align-center mt-2">
         @if (!string.IsNullOrWhiteSpace(MenuDishDto.Prize))
         {
             <MudText Class="dish-price">@MenuDishDto.Prize</MudText>
         }
     </MudItem>
+
+    @if (!string.IsNullOrWhiteSpace(MenuDishDto.Description))
+    {
+        <MudItem xs="12" Class="pt-0">
+            <MudText Class="dish-description">@MenuDishDto.Description</MudText>
+        </MudItem>
+    }
 </MudGrid>
 
 @code {

@@ -13,4 +13,12 @@
 	<PackageReference Include="MudBlazor" Version="8.15.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RestaurantManager.Shared\RestaurantManager.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\icons\" />
+  </ItemGroup>
+
 </Project>

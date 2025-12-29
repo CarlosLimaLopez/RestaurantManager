@@ -1,10 +1,10 @@
-﻿@using RestaurantManager.Interface.DTOs.Response
+﻿@using RestaurantManager.Restaurant
 
-<MudPaper Elevation="0" Class="pa-4">
+<MudPaper Elevation="0" Class="pa-2">
 
     <MudGrid AlignItems="AlignItems.Center">
 
-        <MudItem xs="12" sm="6">
+        <MudItem xs="8" sm="9">
             <MudText Class="restaurant-name" Style="@NameStyle">
                 @RestaurantHeaderDto.Name
             </MudText>
@@ -16,13 +16,9 @@
                 </MudText>
             }
         </MudItem>
-
-        <MudItem xs="0" sm="3">
-        </MudItem>
-
         @if (!string.IsNullOrWhiteSpace(RestaurantHeaderDto.LogoPath))
         {
-            <MudItem xs="12" sm="3" Class="d-flex justify-center justify-sm-end mt-2 mt-sm-0">
+            <MudItem xs="4" sm="3" Class="d-flex justify-center justify-sm-end">
                 <MudImage Src="@RestaurantHeaderDto.LogoPath" Class="logo" />
             </MudItem>
         }

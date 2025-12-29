@@ -26,12 +26,13 @@ namespace RestaurantManager.Context
 
         public static Restaurant CasaUmamiData()
         {
+
             var entrantes = new MenuSection(
                 "Entrantes",
                 1,
                 [
-                    new Dish("Bruschetta", "6.50", "Pan tostado cubierto con tomate fresco, ajo y albahaca"),
-                    new Dish("Calamares Crujientes", "8.90", "Calamares fritos ligeramente, servidos con alioli de limón")
+                    new Dish("Bruschetta", 1, [], "6.50", "Pan tostado cubierto con tomate fresco, ajo y albahaca"),
+                    new Dish("Calamares Crujientes", 2, [], "8.90", "Calamares fritos ligeramente, servidos con alioli de limón")
                 ],
                 "Perfectos para compartir antes del plato principal."
             );
@@ -40,9 +41,9 @@ namespace RestaurantManager.Context
                 "Platos Principales",
                 2,
                 [
-                    new Dish("Salmón a la Parrilla", "18.50", "Filete de salmón fresco a la parrilla con mantequilla de hierbas"),
-                    new Dish("Entrecot de Ternera", "22.00", "Jugoso entrecot de ternera cocinado al punto deseado"),
-                    new Dish("Lasaña Vegetariana", "15.00", "Capas de pasta con verduras de temporada y bechamel cremosa")
+                    new Dish("Salmón a la Parrilla", 1, [], "18.50", "Filete de salmón fresco a la parrilla con mantequilla de hierbas"),
+                    new Dish("Entrecot de Ternera", 2, [], "22.00", "Jugoso entrecot de ternera cocinado al punto deseado"),
+                    new Dish("Lasaña Vegetariana", 3, [], "15.00", "Capas de pasta con verduras de temporada y bechamel cremosa")
                 ],
                 "Todos los platos principales se sirven con una guarnición de verduras asadas."
             );
@@ -51,8 +52,8 @@ namespace RestaurantManager.Context
                 "Postres",
                 3,
                 [
-                    new Dish("Coulant de Chocolate", "6.00", "Bizcocho de chocolate caliente con corazón fundido"),
-                    new Dish("Tarta de Queso", "5.50", "Clásica tarta de queso cremosa con salsa de frutos rojos")
+                    new Dish("Coulant de Chocolate", 1, [], "6.00", "Bizcocho de chocolate caliente con corazón fundido"),
+                    new Dish("Tarta de Queso", 2, [], "5.50", "Clásica tarta de queso cremosa con salsa de frutos rojos")
                 ],
                 "Postres caseros elaborados a diario."
             );
@@ -61,8 +62,8 @@ namespace RestaurantManager.Context
                 "Bebidas",
                 4,
                 [
-                    new Dish("Agua Mineral", "2.50", "Agua con gas o sin gas"),
-                    new Dish("Vino Tinto de la Casa", "4.00", "Copa de nuestro vino tinto seleccionado")
+                    new Dish("Agua Mineral", 1, [], "2.50", "Agua con gas o sin gas"),
+                    new Dish("Vino Tinto de la Casa", 2, [], "4.00", "Copa de nuestro vino tinto seleccionado")
                 ],
                 "Pregunta a nuestro personal por la carta de vinos."
             );
@@ -100,13 +101,13 @@ namespace RestaurantManager.Context
                     "Aperitivos",
                     1,
                     [
-                        new("Aceitunas gordales machacadas", "3"),
-                        new("Gildas", "3.5", "Atún de Almadraba, queso mozzarella, tomate cherry y piparra"),
-                        new("Jamón ibérico", "12 / 24", "100% raza ibérica de bellota \"Lazo\""),
-                        new("Queso Antaño", "7 / 12", "Elaborado con leche cruda de cabra con 12-14 meses de maduración"),
-                        new("Tabla de quesos", "16", "Queso Antaño, trufado, payoyo y roquefort"),
-                        new("Mojama del Rey de Oros", "4 / 8"),
-                        new("Anchoas 0'0", "18", "6 anchoas del cantábrico acompañadas de queso roquefort, salmorejo y tostas de croissant")
+                        new("Aceitunas gordales machacadas", 1, [], "3"),
+                        new("Gildas", 2, [AllergenType.Soy, AllergenType.Lactose, AllergenType.Fish], "3.5", "Atún de Almadraba, queso mozzarella, tomate cherry y piparra"),
+                        new("Jamón ibérico", 3, [], "12 / 24", "100% raza ibérica de bellota \"Lazo\""),
+                        new("Queso Antaño", 4, [AllergenType.Lactose], "7 / 12", "Elaborado con leche cruda de cabra con 12-14 meses de maduración"),
+                        new("Tabla de quesos", 5, [AllergenType.Soy, AllergenType.Lactose], "16", "Queso Antaño, trufado, payoyo y roquefort"),
+                        new("Mojama del Rey de Oros", 6, [AllergenType.Soy], "4 / 8"),
+                        new("Anchoas 0'0", 7, [AllergenType.Gluten, AllergenType.Lactose, AllergenType.Fish], "18", "6 anchoas del cantábrico acompañadas de queso roquefort, salmorejo y tostas de croissant")
                     ],
                     null
                 ),
@@ -114,80 +115,87 @@ namespace RestaurantManager.Context
                     "Entrantes",
                     2,
                     [
-                        new("Ensaladilla de gambas al ajillo", "6 / 10", "Chips de ajo, perejil frito y salsa cóctel"),
-                        new("Ensaladilla de Almadraba", "6 / 10", "Con daditos de atún picante, mayo kimchi y cebollino"),
-                        new("Ensalada de tomate rosa", "7 / 14", "Cama de mézclum, flor de aguacate, tronco de melva, cebolla morada, piparras y vinagreta de cítricos"),
-                        new("Nuestra versión del salpicón de gambón y pulpo", "11", "Tomate rosa osmotizado con vinagre de jerez, cebolleta confitada, gambón y pulpo cocido con emulsión de pimientos amarillos asados"),
-                        new("Vieira", "3.5 ud", "Con mayonesa de kimchi y lima gratinada"),
-                        new("Carpaccio de salmón", "15", "Glaseado con daditos de aguacate, mango, tomate cherry confitado y mozzarella rallada"),
-                        new("Croquetas de puchero", "7 / 14", "Sobre alioli de perejil y velo de jamón"),
-                        new("Tataki de presa ibérica", "15", "Macerado durante 4 horas acompañado de salsa de pimiento rojo asado"),
-                        new("Canelón de carrillá", "11", "Con bechamel trufada y parmesano gratinado"),
-                        new("Tosta de atún", "7.5", "En pan de cristal con nuestra mayo de trufa"),
-                        new("Ensalada cítrica", "24", "Ensalada de mango, aguacate, cebolla morada, tomate, piparras, pulpo y atún"),
-                        new("Tartar de descargamento", "19", "Láminas de aguacate con toque de mayonesa trufada"),
-                        new("Tartar con burrata", "19", "Burrata agripicante con atún macerado y ralladura de limón"),
-                        new("Tartar de ventresca", "20", "Con yema de huevo curada en soja"),
-                        new("Sashimi de ventresca", "16"),
-                        new("Pan brioche", "7.5 ud", "Con crema de queso camembert y atún macerado"),
-                        new("Canelón de calabacín", "17", "Atún picante con cebolla morada envuelto en láminas de calabacín asado y hueva de tobiko"),
-                        new("Ajo blanco", "19", "Tartar de descargamento con sopa fría de almendra"),
-                        new("Tataki nori", "20", "Lingote de atún macerado envuelto en alga nori frito en tempura acompañado de pico de gallo"),
-                        new("Huevos rotos", "18", "Daditos de atún picante con huevos fritos y puntillitas"),
-                        new("Revuelto salvaje", "18", "Patata laminada pochada con salsa de trufa, atún macerado y huevo poché"),
-                        new("Ravioli", "16", "Atún encebollado envuelto en pasta wonton sobre parmentier napado con jugo de atún"),
-                        new("Wok de atún", "17", "Noodles salteados con verdura, setas shiitake, atún, teriyaki y almendras"),
-                        new("Nuestro atún con tomate", "20", "Solomillo de atún sobre pisto de tomate confitado"),
-                        new("Tarantelo mechado", "22", "Glaseado en su propio jugo sobre una cama de patatas chips"),
-                        new("Surtido de crudos", "36", "Tartar de ventresca, Tartar de descargamento picante, Sashimi de ventresca, Tataki de descargamento")
+                        new("Ensaladilla de gambas al ajillo", 1, [AllergenType.Eggs, AllergenType.Mollusks, AllergenType.Crustaceans], "6 / 10", "Chips de ajo, perejil frito y salsa cóctel"),
+                        new("Ensaladilla de Almadraba", 2, [AllergenType.Eggs, AllergenType.Fish], "6 / 10", "Con daditos de atún picante, mayo kimchi y cebollino"),
+                        new("Ensalada de tomate rosa", 3, [AllergenType.Fish], "7 / 14", "Cama de mézclum, flor de aguacate, tronco de melva, cebolla morada, piparras y vinagreta de cítricos"),
+                        new("Nuestra versión del salpicón de gambón y pulpo", 4, [AllergenType.Crustaceans], "11", "Tomate rosa osmotizado con vinagre de jerez, cebolleta confitada, gambón y pulpo cocido con emulsión de pimientos amarillos asados"),
+                        new("Vieira", 5, [AllergenType.Eggs, AllergenType.Mollusks], "3.5 ud", "Con mayonesa de kimchi y lima gratinada"),
+                        new("Carpaccio de salmón", 6, [AllergenType.Gluten, AllergenType.Sesame, AllergenType.Lactose, AllergenType.Fish], "15", "Glaseado con daditos de aguacate, mango, tomate cherry confitado y mozzarella rallada"),
+                        new("Croquetas de puchero", 7, [AllergenType.Gluten, AllergenType.Celery, AllergenType.Eggs], "7 / 14", "Sobre alioli de perejil y velo de jamón"),
+                        new("Tataki de presa ibérica", 8, [AllergenType.Sesame, AllergenType.TreeNuts], "15", "Macerado durante 4 horas acompañado de salsa de pimiento rojo asado"),
+                        new("Canelón de carrillá", 9, [AllergenType.Mollusks, AllergenType.Crustaceans, AllergenType.Sesame, AllergenType.TreeNuts, AllergenType.Lactose, AllergenType.Gluten], "11", "Con bechamel trufada y parmesano gratinado"),
+                    ],
+                    null
+                ),
+                new MenuSection(
+                    "Atún rojo salvaje de Almadraba",
+                    3,
+                    [
+                        new("Tosta de atún", 1, [AllergenType.Gluten, AllergenType.Eggs, AllergenType.Fish, AllergenType.Crustaceans, AllergenType.Soy], "7.5", "En pan de cristal con nuestra mayo de trufa"),
+                        new("Ensalada cítrica", 2, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Mustard], "24", "Ensalada de mango, aguacate, cebolla morada, tomate, piparras, pulpo y atún"),
+                        new("Tartar de descargamento", 3, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Eggs], "19", "Láminas de aguacate con toque de mayonesa trufada"),
+                        new("Tartar con burrata", 4, [AllergenType.Fish, AllergenType.Lactose], "19", "Burrata agripicante con atún macerado y ralladura de limón"),
+                        new("Tartar de ventresca", 5, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Eggs], "20", "Con yema de huevo curada en soja"),
+                        new("Sashimi de ventresca", 6, [AllergenType.Fish], "16"),
+                        new("Pan brioche", 7, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Lactose], "7.5 ud", "Con crema de queso camembert y atún macerado"),
+                        new("Canelón de calabacín", 8, [AllergenType.Fish, AllergenType.Sesame], "17", "Atún picante con cebolla morada envuelto en láminas de calabacín asado y hueva de tobiko"),
+                        new("Ajo blanco", 9, [AllergenType.Gluten, AllergenType.Fish, AllergenType.TreeNuts], "19", "Tartar de descargamento con sopa fría de almendra"),
+                        new("Tataki nori", 10, [AllergenType.Gluten, AllergenType.Fish, AllergenType.TreeNuts, AllergenType.Sesame], "20", "Lingote de atún macerado envuelto en alga nori frito en tempura acompañado de pico de gallo"),
+                        new("Huevos rotos", 11, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Eggs, AllergenType.Mollusks], "18", "Daditos de atún picante con huevos fritos y puntillitas"),
+                        new("Revuelto salvaje", 12, [AllergenType.Crustaceans, AllergenType.Fish, AllergenType.Eggs, AllergenType.Mollusks], "18", "Patata laminada pochada con salsa de trufa, atún macerado y huevo poché"),
+                        new("Ravioli", 13, [AllergenType.Fish, AllergenType.Eggs, AllergenType.Gluten, AllergenType.Sulfites], "16", "Atún encebollado envuelto en pasta wonton sobre parmentier napado con jugo de atún"),
+                        new("Wok de atún", 14, [AllergenType.Gluten, AllergenType.TreeNuts, AllergenType.Soy, AllergenType.Fish, AllergenType.Eggs], "17", "Noodles salteados con verdura, setas shiitake, atún, teriyaki y almendras"),
+                        new("Nuestro atún con tomate", 15, [AllergenType.Fish], "20", "Solomillo de atún sobre pisto de tomate confitado"),
+                        new("Tarantelo mechado", 16, [AllergenType.Fish, AllergenType.Lactose, AllergenType.Sulfites], "22", "Glaseado en su propio jugo sobre una cama de patatas chips"),
+                        new("Surtido de crudos", 17, [AllergenType.Fish], "36", "Tartar de ventresca, Tartar de descargamento picante, Sashimi de ventresca, Tataki de descargamento")
                     ],
                     null
                 ),
                 new MenuSection(
                     "Principales",
-                    3,
+                    4,
                     [
-                        new("Parpatana de atún", "26", "Con guarnición a elegir"),
-                        new("Ventresca de atún", "28", "Con guarnición a elegir"),
-                        new("Solomillo de atún", "22", "Con guarnición a elegir"),
-                        new("Pata de pulpo", "24", "Sobre cremoso de patatas"),
-                        new("Lomo de rodaballo al pil pil", "6.5 / 100g"),
-                        new("Lenguado al pil pil", "7 / 100g"),
-                        new("Jarrete de cordero a baja temperatura", "26", "Glaseado en su propio jugo acompañado de patatas arrugadas con mantequilla de ajo-perejil"),
-                        new("Solomillo de ternera trufado", "22", "Sobre parmentier napado con jugo trufado")
+                        new("Parpatana de atún", 1, [AllergenType.Fish], "26", "Con guarnición a elegir"),
+                        new("Ventresca de atún", 2, [AllergenType.Fish], "28", "Con guarnición a elegir"),
+                        new("Solomillo de atún", 3, [AllergenType.Fish], "22", "Con guarnición a elegir"),
+                        new("Pata de pulpo", 4, [AllergenType.Sulfites], "24", "Sobre cremoso de patatas"),
+                        new("Lomo de rodaballo al pil pil", 5, [AllergenType.Fish, AllergenType.Sulfites], "6.5 / 100g"),
+                        new("Lenguado al pil pil", 6, [AllergenType.Fish, AllergenType.Sulfites], "7 / 100g"),
+                        new("Jarrete de cordero a baja temperatura", 7, [AllergenType.Lactose], "26", "Glaseado en su propio jugo acompañado de patatas arrugadas con mantequilla de ajo-perejil"),
+                        new("Solomillo de ternera trufado", 8, [AllergenType.Lactose], "22", "Sobre parmentier napado con jugo trufado")
                     ],
                     null
                 ),
                 new MenuSection(
                     "Brasas",
-                    4,
+                    5,
                     [
-                        new("Lingote de presa ibérica", "21"),
-                        new("Solomillo de ternera", "9 / 100g"),
-                        new("Entrecot de ternera", "45 / pieza"),
-                        new("Picaña de rubia gallega", "7.5 / 100g"),
-                        new("Lomo bajo de blanck angus uruguayo", "7.5 / 100g"),
-                        new("Wagyu Finca Santa Rosalía (Chuletón)", "11.5 / 100g"),
-                        new("Rubia gallega (Chuletón)", "9.5 / 100g"),
-                        new("Black angus (Chuletón)", "9 / 100g"),
-                        new("Simmental (Chuletón)", "7 / 100g"),
-                        new("T-Bone Frisona", "7.5 / 100g")
+                        new("Lingote de presa ibérica", 1, [], "21"),
+                        new("Solomillo de ternera", 2, [], "9 / 100g"),
+                        new("Entrecot de ternera", 3, [], "45 / pieza"),
+                        new("Picaña de rubia gallega", 4, [], "7.5 / 100g"),
+                        new("Lomo bajo de blanck angus uruguayo", 5, [], "7.5 / 100g"),
+                        new("Wagyu Finca Santa Rosalía (Chuletón)", 6, [], "11.5 / 100g"),
+                        new("Rubia gallega (Chuletón)", 7, [], "9.5 / 100g"),
+                        new("Black angus (Chuletón)", 8, [], "9 / 100g"),
+                        new("Simmental (Chuletón)", 9, [], "7 / 100g"),
+                        new("T-Bone Frisona", 10, [], "7.5 / 100g")
                     ],
                     "Todas nuestras carnes a la brasa van acompañadas de patatas fritas y pimientos del padrón"
                 ),
                 new MenuSection(
                     "Para los más peques",
-                    5,
+                    6,
                     [
-                        new("Filete de pollo con patatas", "9"),
-                        new("Crispy burger", "10"),
-                        new("Patatas fritas con huevo", "6")
+                        new("Filete de pollo con patatas", 1, [], "9"),
+                        new("Crispy burger", 2, [AllergenType.Eggs, AllergenType.Crustaceans, AllergenType.Lactose], "10"),
+                        new("Patatas fritas con huevo", 3, [AllergenType.Eggs], "6")
                     ],
                     null
                 ),
                 new MenuSection(
                     "Carta de vinos",
-                    6,
+                    7,
                     [],
                     null
                 )

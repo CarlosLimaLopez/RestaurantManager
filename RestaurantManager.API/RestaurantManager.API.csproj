@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestaurantManager.Services\RestaurantManager.Services.csproj" />
+    <ProjectReference Include="..\RestaurantManager.Shared\RestaurantManager.Shared.csproj" />
   </ItemGroup>
 
 </Project>

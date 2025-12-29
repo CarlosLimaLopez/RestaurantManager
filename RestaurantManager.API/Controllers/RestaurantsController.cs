@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Net.WebSockets;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace RestaurantManager.Restaurant
 {
@@ -32,8 +30,13 @@ namespace RestaurantManager.Restaurant
                 restaurant = await _restaurantService.GetRestaurant(guid);
             else
                 restaurant = await _restaurantService.GetRestaurant(identifier);
+
+            if (restaurant == null)
+                return NotFound();
+                        
+            var mappedRestaurant = restaurant.ToResponse();
             
-            return Ok(restaurant);
+            return Ok(mappedRestaurant);
         }
     }
 }
