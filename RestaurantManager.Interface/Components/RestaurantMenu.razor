@@ -13,6 +13,11 @@
                     />
             }
 
+            <Allergens 
+                AllergensDto="@Restaurant.Allergens"
+                NameSectionColor="@Restaurant.ActiveMenu.NameSectionColor" 
+                />
+
             @if (!string.IsNullOrWhiteSpace(Restaurant.ActiveMenu.Note))
             {
                 <MudText Class="menu-note">

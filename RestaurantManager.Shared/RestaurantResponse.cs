@@ -9,6 +9,7 @@
         public string? Description { get; set; } = null;
         public string? DescriptionColor { get; set; } = null;
         public string? LogoPath { get; set; } = null;
+        public List<AllergenResponse> Allergens { get; set; } = [];
     }
 
     public class MenuResponse
@@ -48,6 +49,13 @@
     {
         public static RestaurantResponse ToResponse(this Restaurant restaurant)
         {
+            var allergens = restaurant.ActiveMenu == null ? [] : restaurant.ActiveMenu.Sections
+                .SelectMany(s => s.Dishes)
+                .SelectMany(d => d.Allergens)
+                .Distinct()
+                .Select(a => a.ToResponse())
+                .ToList();
+
             return new RestaurantResponse
             {
                 Name = restaurant.Name,
@@ -58,7 +66,8 @@
                 LogoPath = restaurant.LogoPath,
                 ActiveMenu = restaurant.ActiveMenu != null
                     ? restaurant.ActiveMenu.ToResponse()
-                    : new MenuResponse()
+                    : new MenuResponse(),
+                Allergens = allergens
             };
         }
 
