@@ -175,10 +175,10 @@ namespace RestaurantManager.Context
                         new("Entrecot de ternera", 3, [], "45 / pieza"),
                         new("Picaña de rubia gallega", 4, [], "7.5 / 100g"),
                         new("Lomo bajo de blanck angus uruguayo", 5, [], "7.5 / 100g"),
-                        new("Wagyu Finca Santa Rosalía (Chuletón)", 6, [], "11.5 / 100g"),
-                        new("Rubia gallega (Chuletón)", 7, [], "9.5 / 100g"),
-                        new("Black angus (Chuletón)", 8, [], "9 / 100g"),
-                        new("Simmental (Chuletón)", 9, [], "7 / 100g"),
+                        new("Wagyu Finca Santa Rosalía", 6, [], "11.5 / 100g", "(Chuletón)"),
+                        new("Rubia gallega", 7, [], "9.5 / 100g", "(Chuletón)"),
+                        new("Black angus", 8, [], "9 / 100g", "(Chuletón)"),
+                        new("Simmental", 9, [], "7 / 100g", "(Chuletón)"),
                         new("T-Bone Frisona", 10, [], "7.5 / 100g")
                     ],
                     "Todas nuestras carnes a la brasa van acompañadas de patatas fritas y pimientos del padrón"
@@ -214,7 +214,7 @@ namespace RestaurantManager.Context
                 nameColor: "#018D84",
                 description: "NEOTABERNA",
                 descriptionColor: null,
-                logoPath: "images/logos/la-maura-logo.webp");
+                logoPath: "images/logos/la-maura-logo-1a.webp");
 
             restaurant.AddMenu(menu);
 
