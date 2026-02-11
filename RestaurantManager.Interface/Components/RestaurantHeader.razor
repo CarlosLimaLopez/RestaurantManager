@@ -1,4 +1,4 @@
-﻿@using RestaurantManager.Restaurant
+﻿@using RestaurantManager.Restaurants
 
 <MudPaper Elevation="0" Class="pa-2">
 
@@ -29,7 +29,7 @@
 
 @code {
     [Parameter, EditorRequired]
-    public RestaurantResponse RestaurantHeaderDto { get; set; } = default!;
+    public RestaurantActiveMenuGetResponse RestaurantHeaderDto { get; set; } = default!;
 
     private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(RestaurantHeaderDto.NameColor) ? "inherit" : RestaurantHeaderDto.NameColor)}";
 

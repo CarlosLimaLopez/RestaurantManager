@@ -1,4 +1,6 @@
-﻿@using RestaurantManager.Restaurant
+﻿@using RestaurantManager.Restaurants
+@using RestaurantManager.Menus
+@using RestaurantManager.MenuSections
 
 <MudPaper Elevation="0" Class="pa-1 mb-4">
 
@@ -21,7 +23,7 @@
 
 @code {
     [Parameter, EditorRequired]
-    public MenuSectionResponse MenuSectionDto { get; set; } = default!;
+    public MenuSectionGetResponse MenuSectionDto { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public string? NameSectionColor { get; set; } = default!;

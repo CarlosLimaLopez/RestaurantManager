@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace RestaurantManager.Restaurant
+namespace RestaurantManager.Restaurants
 {
+    using Menus;
+
     public class Restaurant
     {
-        private Restaurant() { }
+#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
+        public Restaurant() { }
+#pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
 
         public Restaurant(string name, string path, string? nameColor, string? description, string? descriptionColor, string? logoPath)
         {
-            Id = Guid.NewGuid();
             Name = name;
             Path = path;
-            Menus = [];
             NameColor = nameColor;
             Description = description;
             LogoPath = logoPath;
@@ -20,20 +21,20 @@ namespace RestaurantManager.Restaurant
         }
 
         [Key]
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public List<Menu> Menus { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Name { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+        public List<Menu> Menus { get; init; } = [];
         public Menu? ActiveMenu { 
             get 
             { 
                 return GetActiveMenu(DateOnly.FromDateTime(DateTime.Today)); 
             } 
         }
-        public string? NameColor { get; set; }
-        public string? Description { get; set; }
-        public string? DescriptionColor { get; set; }
-        public string? LogoPath { get; set; }
+        public string? NameColor { get; set; } = null;
+        public string? Description { get; set; } = null;
+        public string? DescriptionColor { get; set; } = null;
+        public string? LogoPath { get; set; } = null;
 
         public void AddMenu(Menu menu) => Menus.Add(menu);
         

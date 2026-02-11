@@ -1,0 +1,117 @@
+﻿@using RestaurantManager.Restaurants
+@using RestaurantManager.Menus
+@using static RestaurantManager.Interface.Components.SectionInsertDialog
+@inject IDialogService DialogService
+
+<MudPaper Class="mt-0 pt-0" Elevation="4">
+    <MudForm FieldChanged="SaveChanges">
+        <MudGrid Class="pt-4">
+            <MudItem xs="3" Class="section-header mt-2 pt-4 pl-8 pb-4">
+                <MudStack Row Class="section-stack pr-2" AlignItems="AlignItems.Center">
+                    <MudText>
+                        Secciones
+                    </MudText>
+                    <MudIconButton Icon=@($"fa-solid fa-plus") OnClick="@(() => OpenCreateSectionDialog())" Size="Size.Small" />
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="9" Class="section-header mt-2 pt-4 pr-2 pb-4">
+                <MudStack 
+                    Class="section-stack" 
+                    Row 
+                    AlignItems="AlignItems.Center">
+                    <div Style="width: 150px !important;">
+                        <MudTextField @bind-Value="@MenuDto.NameSectionColor"
+                                      Class="section-color-name"
+                                      Label="Color del nombre de la sección"
+                                      Variant="Variant.Filled"
+                                      Margin="Margin.Dense" />
+                    </div>
+                    <div Style="flex: 1 !important;">
+                        <MudTextField @bind-Value="@MenuDto.Note"
+                                      Label="Nota final"
+                                      Variant="Variant.Filled"
+                                      Margin="Margin.Dense" />
+                    </div>
+                    <div Style="width: 38px !important;">
+                        <MudIconButton Size="Size.Small"
+                                       Icon=@($"fa-solid fa-trash")
+                                       OnClick="@(() => RemoveMenu())" />
+                    </div>
+                </MudStack>
+            </MudItem>
+
+            @if (MenuDto.Sections.Any() == true)
+            {
+                @foreach (var sectionItem in MenuDto.Sections)
+                {
+                    <MudItem xs="12" Class="section-item mt-0 pt-0">
+                        <MenuSectionEditor MenuSectionDto="@sectionItem" OnReloadRequired="@ReloadSection" />
+                    </MudItem>
+                }
+            }
+            else
+            {
+                <MudItem xs="12" Class="mt-4 pt-0">
+                    <MudText Typo="Typo.body1">
+                        No hay secciones creadas aún.
+                    </MudText>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudForm>
+</MudPaper>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public MenuGetResponse MenuDto { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnReloadRequired { get; set; }
+
+    private async Task OpenCreateSectionDialog()
+    {
+        var options = new DialogOptions()
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        var parameters = new DialogParameters<SectionInsertDialog>
+        {
+            { x => x.Parameters, new SectionInsertDialogParameters { MenuId = MenuDto!.MenuId } }
+        };
+
+        var dialog = await DialogService.ShowAsync<SectionInsertDialog>("Crear sección", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+            await OnReloadRequired.InvokeAsync();
+    }
+
+    private async Task SaveChanges()
+    {
+        var menuUpdateRequest = MenuMapper.ToMenuUpdateRequest(MenuDto);
+
+        await Http.PutAsJsonAsync<MenuUpdateRequest>($"menus/{MenuDto.MenuId}", menuUpdateRequest, CancellationToken.None);
+    }
+
+    private async Task RemoveMenu()
+    {
+        var response = await Http.DeleteAsync($"menus/{MenuDto.MenuId}", CancellationToken.None);
+
+        if(response.IsSuccessStatusCode)
+            await OnReloadRequired.InvokeAsync();
+            
+    }
+
+    private async Task ReloadSection()
+    {
+        await OnReloadRequired.InvokeAsync();
+    }
+}

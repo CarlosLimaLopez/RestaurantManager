@@ -1,4 +1,4 @@
-﻿<MudPaper Elevation="0" Class="pa-1">
+﻿<MudPaper Elevation="0" Class="pa-8">
     @if (@Restaurant != null)
     {
         <RestaurantHeader RestaurantHeaderDto="@Restaurant" />
@@ -7,13 +7,13 @@
         {
             @foreach (var menuSection in @Restaurant.ActiveMenu.Sections)
             {
-                <MenuSection 
+                <MenuSectionComponent
                     MenuSectionDto="@(menuSection)" 
                     NameSectionColor="@Restaurant.ActiveMenu.NameSectionColor" 
                     />
             }
 
-            <Allergens 
+            <AllergensComponent 
                 AllergensDto="@Restaurant.Allergens"
                 NameSectionColor="@Restaurant.ActiveMenu.NameSectionColor" 
                 />

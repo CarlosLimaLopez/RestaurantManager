@@ -1,0 +1,52 @@
+﻿@using RestaurantManager.Menus
+@using RestaurantManager.Restaurants
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudDatePicker @bind-Date="NewDate" Label="Fecha de activación" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="DuplicateMenu" Color="Color.Primary">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public required MenuInsertDialogParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    private DateTime? NewDate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task DuplicateMenu()
+    {
+        if (NewDate == null)
+            return;
+
+        var request = new DuplicateMenuRequest()
+        {
+			NewDate = DateOnly.FromDateTime(NewDate ?? DateTime.Today)
+        };
+
+        var response = await Http.PostAsJsonAsync<DuplicateMenuRequest>($"restaurants/{Parameters.RestaurantId}/menu/{Parameters.MenuId}/duplicate", request, CancellationToken.None);
+
+        if (response.IsSuccessStatusCode)
+            MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    public class MenuInsertDialogParameters
+    {
+        public Guid RestaurantId { get; init; }
+        public Guid MenuId { get; init; }
+    }
+}

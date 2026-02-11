@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RestaurantManager.Restaurant
+namespace RestaurantManager.MenuSections
 {
+    using Dishes;
+
     public class MenuSection
     {
-        private MenuSection() { }
+        public MenuSection() { }
 
-        public MenuSection(string name, int order, IEnumerable<Dish> dishes, string? note)
+        public MenuSection(string name, int order, List<Dish> dishes, string? note)
         {
-            Id = Guid.NewGuid();
             Order = order;
             Name = name;
             Dishes = dishes;
@@ -17,9 +18,9 @@ namespace RestaurantManager.Restaurant
 
         [Key]
         public Guid Id { get; init; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int Order { get; set; }
-        public IEnumerable<Dish> Dishes { get; set; }
-        public string? Note { get; set; }
+        public List<Dish> Dishes { get; set; } = [];
+        public string? Note { get; set; } = null;
     }
 }

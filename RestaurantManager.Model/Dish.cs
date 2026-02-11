@@ -1,14 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RestaurantManager.Restaurant
+namespace RestaurantManager.Dishes
 {
+    using RestaurantManager.Allergens;
+
     public class Dish
     {
-        private Dish() { }
+#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
+        public Dish() { }
+#pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
 
         public Dish(string name, int order, IEnumerable<AllergenType> allergens, string? prize, string? description = null)
         {
-            Id = Guid.NewGuid();
             Name = name;
             Order = order;
             Allergens = allergens;
@@ -18,10 +21,10 @@ namespace RestaurantManager.Restaurant
 
         [Key]
         public Guid Id { get; init; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int Order { get; set; }
-        public IEnumerable<AllergenType> Allergens { get; set; }
-        public string? Description { get; set; }    
-        public string? Prize { get; set; }
+        public IEnumerable<AllergenType> Allergens { get; set; } = [];
+        public string? Description { get; set; } = string.Empty;
+        public string? Prize { get; set; } = string.Empty;
     }
 }

@@ -1,0 +1,56 @@
+﻿@using RestaurantManager.MenuSections
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="Name" Label="Nombre de la sección" Required="true" RequiredError="El nombre es requerido" />
+        <MudTextField @bind-Value="Note" Label="Nota" />
+        <MudNumericField @bind-Value="Order" Label="Orden" Min="1" Required="true" RequiredError="El orden debe ser mayor que 0" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CreateSection" Color="Color.Primary">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public required SectionInsertDialogParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    private string? Name;
+    private string? Note;
+    private int? Order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task CreateSection()
+    {
+        if (string.IsNullOrWhiteSpace(Name) || Order == null || Order <= 0)
+            return;
+
+        var request = new MenuSection()
+        {
+            Name = Name,
+            Order = Order.Value,
+            Note = Note
+        };
+
+        var response = await Http.PostAsJsonAsync<MenuSection>($"menus/{Parameters.MenuId}/sections", request, CancellationToken.None);
+
+        if (response.IsSuccessStatusCode)
+            MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    public class SectionInsertDialogParameters
+    {
+        public Guid MenuId { get; init; }
+    }
+}

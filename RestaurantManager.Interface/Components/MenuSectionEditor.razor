@@ -1,0 +1,187 @@
+﻿@using RestaurantManager.Allergens
+@using RestaurantManager.MenuSections
+@using RestaurantManager.Dishes
+@using static RestaurantManager.Interface.Components.AllegernsSelectorDialog
+@inject IDialogService DialogService
+
+<MudPaper Elevation="0" Class="section-paper pa-0 pt-4 ml-2 mr-2 pb-4">
+    <MudForm FieldChanged="SaveChanges">
+        <MudGrid Spacing="2">
+            <MudItem xs="12" Class="section-fields">
+                <MudStack Row
+                          AlignItems="AlignItems.Center"
+                          Class="section-stack">
+                    <div Style="width: 296px !important;">
+                        <MudTextField @bind-Value="@MenuSectionDto.Name"
+                                      Label="Nombre"
+                                      Variant="Variant.Filled"
+                                      Margin="Margin.Dense" />
+                    </div>
+                    <div Style="width: 60px !important;">
+                        <MudNumericField @bind-Value="@MenuSectionDto.Order"
+                                         Label="Orden"
+                                         Variant="Variant.Filled"
+                                         Margin="Margin.Dense" />
+                    </div>
+                    <div Style="width: 26px !important;">
+                        <MudIconButton Size="Size.Small"
+                                       Icon=@($"fa-solid fa-plus") 
+                                       OnClick="@(() => CreateDish())"/>
+                    </div>
+                    <div style="flex: 1 !important">
+                        <MudTextField @bind-Value="@MenuSectionDto.Note"
+                                      Label="Nota de la sección"
+                                      Variant="Variant.Filled"
+                                      Margin="Margin.Dense" />
+                    </div>
+                    <div Style="width: 38px !important;">
+                        <MudIconButton Size="Size.Small"
+                                       Icon=@($"fa-solid fa-trash")
+                                       OnClick="@(() => RemoveSection())" />
+                    </div>
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="12" Class="pt-0">
+                <MudDataGrid T="DishGetResponse"
+                             Items="@MenuSectionDto.Dishes"
+                             SortMode="SortMode.None"
+                             Dense="true"
+                             Striped="true"
+                             Bordered="true"
+                             ReadOnly="false"
+                             EditMode="DataGridEditMode.Cell"
+                             CommittedItemChanges="@UpdateDish"
+                             Class="datagrid"
+                             HeaderClass="datagrid-header"
+                             RowClass="datagrid-row">
+                    <ColGroup>
+                        <col style="width: 30px;" />  <!-- Orden -->
+                        <col style="width: 280px;" /> <!-- Nombre -->
+                        <col />                       <!-- Descripción (Sin ancho para que sea flexible) -->
+                        <col style="width: 100px;" /> <!-- Precio -->
+                        <col style="width: 100px;" /> <!-- Alérgenos -->
+                        <col style="width: 30px;" /> <!-- Eliminar -->
+                    </ColGroup>
+                    <Columns>
+                        <PropertyColumn Property="x => x.Order" Title="Orden" Required="false" />
+                        <PropertyColumn Property="x => x.Name" Title="Nombre" Required="false" />
+                        <PropertyColumn Property="x => x.Description" Title="Descripción" Required="false" />
+                        <PropertyColumn Property="x => x.Prize" Title="Precio" Required="false" />
+                        <TemplateColumn Title="Alérgenos" Sortable="false" Filterable="false" Editable="false">
+                            <CellTemplate Context="context">
+                                <MudStack Row="true"
+                                          Spacing="0"
+                                          AlignItems="AlignItems.Center"
+                                          Class="allergen-cell"
+                                          @onclick="@(() => OpenAllergensSelectorDialog(context.Item))">
+                                    @foreach (var allergen in context.Item.Allergens)
+                                    {
+                                        <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name.ToString()" />
+                                    }
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Sortable="false" Filterable="false" Editable="false">
+                            <CellTemplate Context="context">
+                                <MudStack Row="true"
+                                          Justify="Justify.Center"
+                                          AlignItems="AlignItems.Center">
+                                    <MudIconButton Class="mid-icon"
+                                                   Icon=@($"fa-solid fa-trash")
+                                                   OnClick="@(() => RemoveDish(context.Item))" />
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <PropertyColumn Property="x => x.DishId" Hidden="true" />
+                    </Columns>
+
+                </MudDataGrid>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+</MudPaper>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public MenuSectionGetResponse MenuSectionDto { get; set; } = default!;
+
+    private List<AllergenGetResponse> AllergensOptions { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        AllergensOptions = AllergenMapper.GetAllAsResponse().ToList();
+    }
+
+    [Parameter]
+    public EventCallback OnReloadRequired { get; set; }
+
+    private async Task SaveChanges()
+    {
+        var menuSectionUpdateRequest = MenuSectionMapper.ToMenuSectionUpdateRequest(MenuSectionDto);
+
+        await Http.PutAsJsonAsync<MenuSectionUpdateRequest>($"menusections/{MenuSectionDto.MenuSectionId}", menuSectionUpdateRequest, CancellationToken.None);
+    }
+
+    private async Task RemoveSection()
+    {
+        var response = await Http.DeleteAsync($"menusections/{MenuSectionDto.MenuSectionId}");
+
+        if (response.IsSuccessStatusCode)
+             await OnReloadRequired.InvokeAsync();
+    }
+
+    private async Task CreateDish()
+    {
+        var response = await Http.PostAsJsonAsync<Dish>($"menusections/{MenuSectionDto.MenuSectionId}/dishes", new(), CancellationToken.None);
+
+        if (response.IsSuccessStatusCode)
+            await OnReloadRequired.InvokeAsync();
+    }
+
+    private async Task UpdateDish(DishGetResponse item)
+    {
+        var dishUpdateRequest = DishMapper.ToDishUpdateRequest(item);
+
+        await Http.PutAsJsonAsync<DishUpdateRequest>($"dishes/{item.DishId}", dishUpdateRequest, CancellationToken.None);
+    }
+
+    private async Task RemoveDish(DishGetResponse dish)
+    {
+        MenuSectionDto.Dishes.Remove(dish);
+
+        await Http.DeleteAsync($"dishes/{dish.DishId}");
+    }
+
+    private async Task OpenAllergensSelectorDialog(DishGetResponse d)
+    {
+        var options = new DialogOptions()
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        var parameters = new DialogParameters<AllegernsSelectorDialog>
+        {
+            { x => x.Parameters, new AllegernsSelectorDialogParameters { DishId = d.DishId, OriginalAllergens = d.Allergens.ToList() } }
+        };
+
+        var dialog = await DialogService.ShowAsync<AllegernsSelectorDialog>("Seleccionar alérgenos", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            var selectedAllergens = result.Data as IEnumerable<AllergenGetResponse>;
+            if (selectedAllergens != null)
+            {
+                d.Allergens = selectedAllergens.ToList();
+                await UpdateDish(d);
+            }
+        }
+    }
+}

@@ -1,0 +1,179 @@
+﻿@page "/restaurants/{RestaurantId:guid}"
+
+@using RestaurantManager.Interface.Components
+@using RestaurantManager.Restaurants
+@using RestaurantManager.Menus
+@using static RestaurantManager.Interface.Components.MenuInsertDialog
+@inject IDialogService DialogService
+
+<MudContainer Class="pa-8" MaxWidth="MaxWidth.Large" Style="background-color: white">
+    @if (Restaurant != null)
+    {
+        <MudGrid>
+
+            <MudItem xs="8" sm="9">
+                <MudText Class="restaurant-name">
+                    @Restaurant.Name
+                </MudText>
+
+                @if (!string.IsNullOrWhiteSpace(@Restaurant.Description))
+                {
+                    <MudText Class="restaurant-description" >
+                        @Restaurant.Description
+                    </MudText>
+                }
+            </MudItem>
+
+            @if (!string.IsNullOrWhiteSpace(Restaurant.LogoPath))
+            {
+                <MudItem xs="4" sm="3" Class="d-flex justify-center justify-sm-end">
+                    <MudImage Src="@Restaurant.LogoPath" Class="logo" />
+                </MudItem>
+            }
+
+            <MudItem xs="6">
+                <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center">
+                    @if (Restaurant?.Menus.Any() == true)
+                    {
+                        <MudSelect T="DateOnly"
+                                    Class="custom-select"
+                                    FitContent="true"
+                                    Variant="Variant.Filled"
+                                    Margin="Margin.Dense"
+                                    @bind-Value="SelectedDate">
+                            @foreach (var menu in Restaurant.Menus)
+                            {
+                                <MudSelectItem T="DateOnly" Value="menu.ActivateAt">@menu.ActivateAt.ToString("dd/MM/yyyy")</MudSelectItem>
+                            }
+                        </MudSelect>
+                    }
+                    <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-plus") OnClick="@(() => OpenCreateRestaurantDialog())" />
+                    <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-clone") OnClick="@(() => OpenDuplicateMenuDialog())" />
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="6" Style="padding-left: 0px !important;">
+                <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
+                    <MudText>
+                        Histórico de menús
+                    </MudText>
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="12" Class="pt-0">
+                @if (Restaurant?.Menus.Any() == true && SelectedMenu != null)
+                {
+                    <RestaurantMenuEditor MenuDto="@SelectedMenu" OnReloadRequired="@ReloadRestaurant" />
+                }
+            </MudItem>
+        </MudGrid>                
+    }
+</MudContainer>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public Guid RestaurantId { get; set; }
+
+    public RestaurantGetResponse? Restaurant { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadRestaurant();
+    }
+
+    private async Task ReloadRestaurant()
+    {
+        Restaurant = await GetRestaurant(CancellationToken.None);
+
+        if (Restaurant == null)
+            return;
+
+        if (SelectedDate == DateOnly.MinValue)
+        {
+            var closest = Restaurant.Menus?
+                .Where(m => m.ActivateAt <= DateOnly.FromDateTime(DateTime.Today))
+                .OrderByDescending(m => m.ActivateAt)
+                .FirstOrDefault();
+
+            if (closest == null)
+                return;
+
+            SelectedDate = closest.ActivateAt;
+        }
+
+        UpdateSelectedMenu();
+    }
+
+    private Task<RestaurantGetResponse?> GetRestaurant(CancellationToken cancellationToken)
+        => Http.GetFromJsonAsync<RestaurantGetResponse>($"restaurants/{RestaurantId}", cancellationToken);
+
+    private DateOnly _selectedDate;
+
+    private DateOnly SelectedDate
+    {
+        get => _selectedDate;
+        set
+        {
+            if (_selectedDate != value)
+            {
+                _selectedDate = value;
+                UpdateSelectedMenu();
+            }
+        }
+    }
+
+    private MenuGetResponse? SelectedMenu;
+
+    private void UpdateSelectedMenu()
+    {
+        if (Restaurant?.Menus.Any() == true)
+            SelectedMenu = Restaurant.Menus.FirstOrDefault(m => m.ActivateAt == _selectedDate);
+    }
+
+    private async Task OpenCreateRestaurantDialog()
+    {
+        var options = new DialogOptions()
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.Small,
+                FullWidth = true
+            };
+
+        var parameters = new DialogParameters<MenuInsertDialog>
+        {
+            { x => x.Parameters, new MenuInsertDialogParameters { RestaurantId = Restaurant!.Id } }
+        };
+
+        var dialog = await DialogService.ShowAsync<MenuInsertDialog>("Crear menú", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+            await ReloadRestaurant();
+    }
+
+    private async Task OpenDuplicateMenuDialog()
+    {
+        var options = new DialogOptions()
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        var parameters = new DialogParameters<DuplicateMenuDialog>
+        {
+            { x => x.Parameters, new DuplicateMenuDialog.MenuInsertDialogParameters { RestaurantId = Restaurant!.Id, MenuId = SelectedMenu!.MenuId } }
+        };
+
+        var dialog = await DialogService.ShowAsync<DuplicateMenuDialog>("Duplicar menú", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+            await ReloadRestaurant();
+    }
+}

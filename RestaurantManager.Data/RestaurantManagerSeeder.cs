@@ -2,7 +2,11 @@
 
 namespace RestaurantManager.Context
 {
-    using Restaurant;
+    using Restaurants;
+    using Menus;
+    using MenuSections;
+    using Dishes;
+    using Allergens;
 
     public static class RestaurantManagerSeeder
     {
