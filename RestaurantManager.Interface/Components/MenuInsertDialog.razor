@@ -1,0 +1,56 @@
+﻿@using RestaurantManager.Menus
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudDatePicker @bind-Date="DateTimeActivatedAt" Label="Fecha de activación" />
+        <MudTextField @bind-Value="Note" Label="Nota" />
+        <MudTextField @bind-Value="NameSectionColor" Label="Color del nombre de la sección" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CreateMenu" Color="Color.Primary">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public required MenuInsertDialogParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    private DateTime? DateTimeActivatedAt { get; set; }
+    private string? Note;
+    private string? NameSectionColor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task CreateMenu()
+    {
+        if (DateTimeActivatedAt == null)
+            return;
+
+        var request = new Menu()
+        {
+			ActivateAt = DateOnly.FromDateTime(DateTimeActivatedAt ?? DateTime.Today),
+			Note = Note,
+			NameSectionColor = NameSectionColor
+        };
+
+        var response = await Http.PostAsJsonAsync<Menu>($"restaurants/{Parameters.RestaurantId}/menu", request, CancellationToken.None);
+
+        if (response.IsSuccessStatusCode)
+            MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    public class MenuInsertDialogParameters
+    {
+        public Guid RestaurantId { get; init; }
+    }
+}

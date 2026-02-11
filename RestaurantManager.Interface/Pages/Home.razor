@@ -1,16 +1,137 @@
 ﻿@page "/"
+
 @using RestaurantManager.Interface.Components
+@using RestaurantManager.Restaurants
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    Home
-   <MudButton OnClick="@(() => Navigation.NavigateTo("/carta/la-maura"))">
-        Ir a La Maura
-    </MudButton>
-    <MudButton OnClick="@(() => Navigation.NavigateTo("/carta/casa-umami"))">
-        Ir a Casa Umami
-    </MudButton>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudDataGrid 
+        T="RestaurantSummaryGetResponse"
+        Items="@Restaurants"
+        ReadOnly="false"
+        EditMode="DataGridEditMode.Cell"
+        CommittedItemChanges="@UpdateRestaurant"
+        SortMode="SortMode.None"
+        Dense="true"
+        Striped="true"
+        Bordered="true"
+        Class="datagrid mt-8"
+        HeaderClass="datagrid-header"
+        RowClass="datagrid-row">
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Restaurantes</MudText>
+            <MudSpacer />
+            <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-plus") OnClick="CreateRestaurant" />
+        </ToolBarContent>
+
+        <ColGroup>
+            <col style="width: 200px;" /> <!-- Name -->
+            <col style="width: 80px;" />  <!-- Color -->
+            <col />                       <!-- Description -->
+            <col style="width: 80px;" /> <!-- Color -->
+            <col style="width: 120px;" /> <!-- Path -->
+            <col style="width: 240px;" /> <!-- Logo -->
+            <col style="width: 30px;" /> <!-- Active Menu -->
+            <col style="width: 30px;" /> <!-- Edit Menus -->
+            <col style="width: 30px;" /> <!-- Delete -->
+        </ColGroup>
+
+        <Columns>
+            <PropertyColumn Property="x => x.Name" Title="Nombre" Required="false" />
+            <PropertyColumn Property="x => x.NameColor" Title="Color" Required = "false"/>
+            <PropertyColumn Property="x => x.Description" Title="Descripción" Required="false" />
+            <PropertyColumn Property="x => x.DescriptionColor" Title="Color" Required="false" />
+            <PropertyColumn Property="x => x.Path" Title="Path" Required="false" />
+            <PropertyColumn Property="x => x.LogoPath" Title="Logo" Required="false" />
+
+            <TemplateColumn Sortable="false" Filterable="false" Editable = "false">
+                <CellTemplate Context="context">
+                    <MudStack 
+                        Row="true" 
+                        Justify="Justify.Center" 
+                        AlignItems="AlignItems.Center">
+                        <MudIconButton 
+                            Class="mid-icon"
+                            Icon=@($"fa-solid fa-sheet-plastic")
+                            OnClick="@(() => NavigateToActiveMenu(context.Item.Path))" />
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Sortable="false" Filterable="false" Editable = "false">
+                <CellTemplate Context="context">
+                    <MudStack 
+                        Row="true" 
+                        Justify="Justify.Center" 
+                        AlignItems="AlignItems.Center">
+                        <MudIconButton 
+                            Class="mid-icon"
+                            Icon=@($"fa-solid fa-pen-to-square")
+                            OnClick="@(() => NavigateToManageMenu(context.Item.Id))" />
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Sortable="false" Filterable="false" Editable = "false">
+                <CellTemplate Context="context">
+                    <MudStack 
+                        Row="true" 
+                        Justify="Justify.Center" 
+                        AlignItems="AlignItems.Center">
+                        <MudIconButton 
+                            Class="mid-icon"
+                            Icon=@($"fa-solid fa-trash")
+                        OnClick="@(() => RemoveRestaurant(context.Item.Id))" />
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <PropertyColumn Property="x => x.Id" Hidden="true" />
+        </Columns>
+
+    </MudDataGrid>
 </MudContainer>
 
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
 
+    private RestaurantSummaryGetResponse[] Restaurants { get; set; } = [];
 
+    protected override async Task OnInitializedAsync() => await ReloadGrid();
+
+    private async Task ReloadGrid()
+    {
+        var result = await Http.GetFromJsonAsync<RestaurantSummaryGetResponse[]>("restaurants", CancellationToken.None);
+        if (result is not null)
+            Restaurants = result;
+    }
+
+    private async Task CreateRestaurant()
+    {
+        var response = await Http.PostAsJsonAsync<Restaurant>($"restaurants", new(), CancellationToken.None);
+
+        if (response.IsSuccessStatusCode)
+            await ReloadGrid();
+    }
+
+    private async Task UpdateRestaurant(RestaurantSummaryGetResponse item)
+    {
+        var restaurantUpdateRequest = RestaurantMapper.ToRestaurantUpdateRequest(item);
+
+        await Http.PutAsJsonAsync<RestaurantUpdateRequest>($"restaurants/{item.Id}", restaurantUpdateRequest, CancellationToken.None);
+    }
+
+    private async Task RemoveRestaurant(Guid restaurantId)
+    {
+        var response = await Http.DeleteAsync($"restaurants/{restaurantId}", CancellationToken.None);
+        
+        if (response.IsSuccessStatusCode)
+            await ReloadGrid();
+    }
+    
+    void NavigateToActiveMenu(string path) => Navigation.NavigateTo($"/carta/{path}");
+
+    void NavigateToManageMenu(Guid restaurantId) => Navigation.NavigateTo($"/restaurants/{restaurantId}");
+}

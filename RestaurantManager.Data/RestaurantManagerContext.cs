@@ -1,7 +1,11 @@
 ﻿namespace RestaurantManager.Context
 {
     using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-    using Restaurant;
+    using Restaurants;
+    using Menus;
+    using MenuSections;
+    using Dishes;
+    using Allergens;
 
     /// <summary>
     /// Database context for the RestaurantManager application.

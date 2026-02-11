@@ -20,9 +20,13 @@ namespace RestaurantManager.Data
 
             return services;
         }
+
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
+            services.AddScoped<IDishRepository, DishRepository>();
 
             return services;
         }

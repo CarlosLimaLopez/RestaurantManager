@@ -1,0 +1,25 @@
+﻿@using RestaurantManager.Restaurants
+
+<MudForm FieldChanged="SaveChanges">
+    <MudGrid>
+        <MudItem xs="4" Class="mt-1">
+            <MudTextField @bind-Value="@RestaurantDto.Name"
+                          Label="Nombre" ReadOnly="true" />
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public RestaurantGetResponse RestaurantDto { get; set; } = default!;
+
+    private async Task SaveChanges()
+    {
+        var restaurantUpdateRequest = RestaurantMapper.ToRestaurantUpdateRequest(RestaurantDto);
+
+        await Http.PutAsJsonAsync<RestaurantUpdateRequest>($"restaurants/{RestaurantDto.Id}", restaurantUpdateRequest, CancellationToken.None);
+    }
+}

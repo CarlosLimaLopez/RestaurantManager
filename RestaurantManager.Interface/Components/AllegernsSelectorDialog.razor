@@ -1,0 +1,86 @@
+﻿@using RestaurantManager.Allergens
+@using RestaurantManager.MenuSections
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudChipSet 
+            T="AllergenGetResponse"
+            SelectedValues="SelectedAllergens"
+            SelectedValuesChanged="OnSelectedValuesChanged"
+            SelectionMode="SelectionMode.MultiSelection">
+            @foreach (var allergen in DefinedAllergens)
+                {
+                <MudChip 
+                    Value="allergen" 
+                    Color="Color.Primary"
+                    Variant="Variant.Text">
+                        <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                            <MudIcon 
+                                Class="allergen-icon"
+                                Size="Size.Small" 
+                                Icon="@($"fa-solid fa-{allergen.Icon}")" 
+                                Title="@allergen.Name"
+                                Style=@(IconColor(allergen)) />
+                            <MudText>
+                                @allergen.Name
+                            </MudText>
+                        </MudStack>
+                </MudChip>
+                }
+        </MudChipSet>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Save">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public required AllegernsSelectorDialogParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    private IEnumerable<AllergenGetResponse> DefinedAllergens { get; set; } = [];
+
+    private IReadOnlyCollection<AllergenGetResponse> SelectedAllergens { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        DefinedAllergens = AllergenMapper.GetAllAsResponse();
+        SelectedAllergens = new HashSet<AllergenGetResponse>(Parameters.OriginalAllergens);
+    }
+
+    private void OnSelectedValuesChanged(IReadOnlyCollection<AllergenGetResponse> values)
+    {
+        SelectedAllergens = values;
+    }
+
+    private void Save()
+    {
+        MudDialog.Close(DialogResult.Ok(SelectedAllergens));
+    }
+
+    public class AllegernsSelectorDialogParameters
+    {
+        public Guid DishId { get; init; }
+        public List<AllergenGetResponse> OriginalAllergens { get; init; } = [];
+    }
+
+    private bool IsAllergenSelected(AllergenGetResponse allergen)
+    {
+        return SelectedAllergens.Contains(allergen);
+    }
+
+    private string IconColor(AllergenGetResponse allergen)
+    {
+        if (SelectedAllergens.Contains(allergen))
+            return "color: var(--mud-palette-primary-text) !important;";
+        else
+            return "color: var(--mud-palette-primary) !important;";
+    }
+}
