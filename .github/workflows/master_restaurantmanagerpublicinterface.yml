@@ -54,8 +54,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_PUBLICINTERFACE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_PUBLICINTERFACE }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_PUBLICINTERFACE }}
-          client-secret: ${{ secrets.AZUREAPPSERVICE_CLIENTSECRET_PUBLICINTERFACE }}
-          auth-type: oidc
 
       # Optional: verify login works
       - name: Verify Azure login
