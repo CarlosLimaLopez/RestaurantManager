@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CI", "CI", "{02EA681E-C7D8-
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\azure-static-web-apps-nice-plant-082ecd603.yml = .github\workflows\azure-static-web-apps-nice-plant-082ecd603.yml
 		.github\workflows\master_restaurantmanagerapi.yml = .github\workflows\master_restaurantmanagerapi.yml
-		.github\workflows\master_restaurantmanagerpublicinterface.yml = .github\workflows\master_restaurantmanagerpublicinterface.yml
+		.github\workflows\RestaurantManagerInterfacePublic.yml = .github\workflows\RestaurantManagerInterfacePublic.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Interface.Public", "RestaurantManager.Interface.Public\RestaurantManager.Interface.Public.csproj", "{77EA6D93-2021-41AD-8277-475B16A08026}"
