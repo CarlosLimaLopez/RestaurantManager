@@ -51,8 +51,10 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_PUBLICINTERFACE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_PUBLICINTERFACE }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_PUBLICINTERFACE }}
+          client-secret: ${{ secrets.AZUREAPPSERVICE_CLIENTSECRET_PUBLICINTERFACE }}
 
       # Optional: verify login works
       - name: Verify Azure login
