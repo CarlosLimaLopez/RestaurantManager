@@ -1,13 +1,13 @@
-name: Compilar e implementar la aplicación de .NET Core en la aplicación web RestaurantManagerInterfacePublic
+name: RestaurantManager.Interface.Public
 on:
   push:
     branches:
-    - master
+    - new-blazor-app
 permissions:
   id-token: write
   contents: read
 env:
-  AZURE_WEBAPP_NAME: RestaurantManagerInterfacePublic
+  AZURE_WEBAPP_NAME: restaurant-manager-interface-public
   AZURE_WEBAPP_PACKAGE_PATH: RestaurantManager.Interface.Public\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
@@ -46,9 +46,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.RestaurantManagerInterfacePublic_CLIENT_ID_D6A8 }}
-        tenant-id: ${{ secrets.RestaurantManagerInterfacePublic_TENANT_ID_D6A8 }}
-        subscription-id: ${{ secrets.RestaurantManagerInterfacePublic_SUBSCRIPTION_ID_D6A8 }}
+        client-id: ${{ vars.restaurant_manager_interface_public_CLIENT_ID_6B50 }}
+        tenant-id: ${{ vars.restaurant_manager_interface_public_TENANT_ID_6B50 }}
+        subscription-id: ${{ vars.restaurant_manager_interface_public_SUBSCRIPTION_ID_6B50 }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
