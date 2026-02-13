@@ -2,7 +2,7 @@ name: RestaurantManager.Interface.Public
 on:
   push:
     branches:
-    - new-blazor-app
+    - master
 permissions:
   id-token: write
   contents: read
