@@ -1,4 +1,4 @@
-name: RestaurantManager.Interface CI/CD
+name: RestaurantManager.Interface
 
 on:
   push:
