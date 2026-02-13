@@ -25,5 +25,5 @@ jobs:
           output_location: "wwwroot"
           app_build_command: >
             dotnet publish -c Release -o ./publish &&
-            mkdir -p ./publish/wwwroot &&
-            echo '{"RestaurantManagerApiAddress":"https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/"}' > ./publish/wwwroot/appsettings.json          
+            mkdir -p ./wwwroot &&
+            echo '{"RestaurantManagerApiAddress":"https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/"}' > ./wwwroot/appsettings.json
