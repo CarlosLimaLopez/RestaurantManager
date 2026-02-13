@@ -55,6 +55,20 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_PUBLICINTERFACE }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_PUBLICINTERFACE }}
 
+      - name: Configure App Service settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: 'RestaurantManagerAPI'
+          slot-name: 'Production'
+          app-settings-json: >
+            [
+              {
+                "name": "RestaurantManagerApiAddress",
+                "value": "https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/",
+                "slotSetting": false
+              }
+            ]
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
