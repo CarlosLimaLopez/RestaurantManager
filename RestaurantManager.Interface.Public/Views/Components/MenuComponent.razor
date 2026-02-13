@@ -1,0 +1,57 @@
+﻿@using RestaurantManager.Restaurants
+
+<MudPaper Elevation="0" Class="pa-2 pa-sm-8">
+    @if (RestaurantActiveMenu != null)
+    {
+        <HeaderComponent HeaderDto="@RestaurantActiveMenu" />
+
+        if(RestaurantActiveMenu.ActiveMenu != null)
+        {
+            @foreach (var menuSection in RestaurantActiveMenu.ActiveMenu.Sections)
+            {
+                <SectionComponent
+                    SectionDto="@(menuSection)" 
+                    NameSectionColor="@RestaurantActiveMenu.ActiveMenu.NameSectionColor" 
+                    />
+            }
+
+            <AllergensComponent 
+                AllergensDto="@RestaurantActiveMenu.Allergens"
+                NameSectionColor="@RestaurantActiveMenu.ActiveMenu.NameSectionColor" 
+                />
+
+            @if (!string.IsNullOrWhiteSpace(RestaurantActiveMenu.ActiveMenu.Note))
+            {
+                <MudText Class="menu-note">
+                    @RestaurantActiveMenu.ActiveMenu.Note
+                </MudText>
+            }
+        }
+    }
+</MudPaper>
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    [Parameter]
+    public string RestauranteName { get; set; } = string.Empty;
+
+    public RestaurantActiveMenuGetResponse? RestaurantActiveMenu { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        RestaurantActiveMenu = await GetRestaurantActiveMenu(CancellationToken.None);
+
+        if (RestaurantActiveMenu?.ActiveMenu != null)
+        {
+            RestaurantActiveMenu.ActiveMenu.Sections = RestaurantActiveMenu.ActiveMenu.Sections.OrderBy(s => s.Order).ToArray();
+
+            foreach (var section in RestaurantActiveMenu.ActiveMenu.Sections)
+                section.Dishes = section.Dishes.OrderBy(d => d.Order).ToList();
+        }
+    }
+
+    private Task<RestaurantActiveMenuGetResponse?> GetRestaurantActiveMenu(CancellationToken cancellationToken)
+        => Http.GetFromJsonAsync<RestaurantActiveMenuGetResponse>($"restaurants/{RestauranteName}/active-menu", cancellationToken);
+}

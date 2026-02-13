@@ -1,0 +1,32 @@
+﻿@using RestaurantManager.Restaurants
+@using RestaurantManager.Menus
+@using RestaurantManager.MenuSections
+
+<MudPaper Elevation="0" Class="pa-1 mb-4">
+
+    <MudText Class="mb-1 menu-section-name" Style="@NameStyle">
+        @SectionDto.Name
+    </MudText>
+
+    @foreach (var dish in SectionDto.Dishes)
+    {
+        <DishComponent DishDto="@dish" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(SectionDto.Note))
+    {
+        <MudText Class="mt-6 menu-section-note">
+            @SectionDto.Note
+        </MudText>
+    }
+</MudPaper>
+
+@code {
+    [Parameter, EditorRequired]
+    public MenuSectionGetResponse SectionDto { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string? NameSectionColor { get; set; } = default!;
+
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameSectionColor) ? "inherit" : NameSectionColor)}";
+}
