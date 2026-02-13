@@ -2,13 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-	<Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
 
 </Project>
