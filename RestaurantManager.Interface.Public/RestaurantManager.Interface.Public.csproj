@@ -19,5 +19,11 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\icons\" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
