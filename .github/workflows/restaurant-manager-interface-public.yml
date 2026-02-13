@@ -49,6 +49,21 @@ jobs:
         client-id: ${{ secrets.restaurant_manager_interface_public_CLIENT_ID_6B50 }}
         tenant-id: ${{ secrets.restaurant_manager_interface_public_TENANT_ID_6B50 }}
         subscription-id: ${{ secrets.restaurant_manager_interface_public_SUBSCRIPTION_ID_6B50 }}
+
+    - name: Configure App Service settings
+      uses: azure/appservice-settings@v1
+      with:
+        app-name: 'RestaurantManagerAPI'
+        slot-name: 'Production'
+        app-settings-json: >
+          [
+            {
+              "name": "RestaurantManagerApiAddress",
+              "value": "https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/",
+              "slotSetting": false
+            }
+          ]
+        
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
