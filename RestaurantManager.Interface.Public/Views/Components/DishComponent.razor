@@ -1,0 +1,37 @@
+﻿@using RestaurantManager.Restaurants
+@using RestaurantManager.Dishes
+
+<MudGrid AlignItems="AlignItems.Center" Class="mb-2">
+    <MudItem xs="8" Class="mt-1">
+        <MudText Class="dish-name" Display="Inline">@DishDto.Name</MudText>
+    </MudItem>
+
+    <MudItem xs="4" Class="d-flex justify-end align-center mt-2">
+        @if (!string.IsNullOrWhiteSpace(DishDto.Prize))
+        {
+            <MudText Class="dish-price">@DishDto.Prize</MudText>
+        }
+    </MudItem>
+
+    @if (!string.IsNullOrWhiteSpace(DishDto.Description))
+    {
+        <MudItem xs="12" Class="pt-0">
+                <MudText Class="dish-description">@DishDto.Description</MudText>
+        </MudItem>
+    }
+
+    @if (DishDto.Allergens.Any())
+    {
+        <MudItem xs="12" Class="pt-0">
+            @foreach (var allergen in DishDto.Allergens)
+            {
+                <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name.ToString()" />
+            }
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    [Parameter, EditorRequired]
+    public DishGetResponse DishDto { get; set; } = default!;
+}

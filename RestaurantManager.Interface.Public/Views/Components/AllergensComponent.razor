@@ -1,0 +1,35 @@
+﻿@using RestaurantManager.Restaurants
+@using RestaurantManager.Allergens
+
+@if (AllergensDto.Any())
+{
+    <MudPaper Elevation="0" Class="pa-1 mb-4 allergens">
+
+        <MudText Class="pt-1 mb-1 allergen-section-name" Style="@NameStyle" Align="Align.Center">
+            Información sobre alérgenos
+        </MudText>
+
+        <MudGrid AlignItems="AlignItems.Center" Class="pa-0 mt-0 mb-2">
+            @foreach (var allergen in AllergensDto)
+            {
+                <MudItem xs="6" md="3" Class="pt-2">
+                    <div style="justify-content: center; display:flex; align-items:center; gap:4px;">
+                        <MudText>@allergen.Name</MudText>
+                        <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name" />
+                    </div>
+                </MudItem>
+            }
+        </MudGrid>
+        
+    </MudPaper>    
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public List<AllergenGetResponse> AllergensDto { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string? NameSectionColor { get; set; } = default!;
+
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameSectionColor) ? "inherit" : NameSectionColor)}";
+}

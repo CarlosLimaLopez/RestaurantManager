@@ -1,10 +1,19 @@
-using RestaurantManager.Interface.Public.Components;
+using MudBlazor.Services;
+using RestaurantManager.Interface.Public.Views;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var restaurantManagerApiAddress = builder.Configuration["RestaurantManagerApiAddress"];
+if (string.IsNullOrEmpty(restaurantManagerApiAddress))
+    throw new Exception("Please configure the RestaurantManagerApiAddress setting in your configuration.");
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(restaurantManagerApiAddress!) });
+
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Interface
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Shared", "RestaurantManager.Shared\RestaurantManager.Shared.csproj", "{D46B59D0-0994-4118-8625-88464FF6184D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Interface.Public", "RestaurantManager.Interface.Public\RestaurantManager.Interface.Public.csproj", "{1F3C9D12-370B-4518-A8BF-CD2CF1CFC44B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Interface.Public", "RestaurantManager.Interface.Public\RestaurantManager.Interface.Public.csproj", "{77EA6D93-2021-41AD-8277-475B16A08026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
