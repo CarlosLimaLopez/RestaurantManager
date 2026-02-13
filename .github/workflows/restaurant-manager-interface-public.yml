@@ -1,4 +1,4 @@
-name: Compilar e implementar la aplicación de .NET Core en la aplicación web restaurant-manager-interface-public
+name: RestaurantManager.Interface.Public
 on:
   push:
     branches:
