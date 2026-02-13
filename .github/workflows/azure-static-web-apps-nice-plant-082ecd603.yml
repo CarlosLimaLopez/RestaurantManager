@@ -23,5 +23,7 @@ jobs:
           production_branch: "master"
           app_location: "./RestaurantManager.Interface"
           output_location: "wwwroot"
-          app_build_command: "dotnet publish -c Release -o ./publish"
-          app_configuration_command: 'printf "{\"RestaurantManagerApiAddress\": \"https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/\"}" > ./publish/wwwroot/appsettings.json'
+          app_build_command: >
+            dotnet publish -c Release -o ./publish &&
+            mkdir -p ./publish/wwwroot &&
+            echo '{"RestaurantManagerApiAddress":"https://restaurantmanagerapi-c9hwd2cwf9hka4an.spaincentral-01.azurewebsites.net/api/"}' > ./publish/wwwroot/appsettings.json          
