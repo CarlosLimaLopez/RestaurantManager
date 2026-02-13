@@ -46,9 +46,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        client-id: ${{ vars.RestaurantManagerInterfacePublic_CLIENT_ID_D6A8 }}
-        tenant-id: ${{ vars.RestaurantManagerInterfacePublic_TENANT_ID_D6A8 }}
-        subscription-id: ${{ vars.RestaurantManagerInterfacePublic_SUBSCRIPTION_ID_D6A8 }}
+        client-id: ${{ secrets.RestaurantManagerInterfacePublic_CLIENT_ID_D6A8 }}
+        tenant-id: ${{ secrets.RestaurantManagerInterfacePublic_TENANT_ID_D6A8 }}
+        subscription-id: ${{ secrets.RestaurantManagerInterfacePublic_SUBSCRIPTION_ID_D6A8 }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
