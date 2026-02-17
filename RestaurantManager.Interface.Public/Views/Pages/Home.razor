@@ -6,7 +6,7 @@
         @foreach (var restaurant in Restaurants)
         {
             <MudItem xs="6" md="3">
-                <NavLink href="@($"/menu/{restaurant.Path}")">
+                <NavLink href="@($"/{restaurant.Path}")">
                     <MudCard Class="d-flex flex-column align-center" Style="height: 100%;" Elevation="2">
                         <MudCardContent Class="d-flex flex-column align-center justify-center flex-grow-1">
                             @if (!string.IsNullOrEmpty(restaurant.LogoPath))
@@ -46,11 +46,5 @@
         var result = await Http.GetFromJsonAsync<RestaurantSummaryGetResponse[]>("restaurants", CancellationToken.None);
         if (result is not null)
             Restaurants = result;
-    }
-
-    private void NavigateToActiveMenu(string path)
-    {
-        Console.WriteLine($"Navegando a: /menu/{path}");
-        Navigation.NavigateTo($"/menu/{path}");
     }
 }
