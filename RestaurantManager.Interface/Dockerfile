@@ -19,6 +19,9 @@ WORKDIR /usr/share/nginx/html
 # Copiar los archivos publicados de Blazor WebAssembly
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
 
+# Modificar la base href para que funcione con /admin/
+RUN sed -i 's|<base href="/" />|<base href="/admin/" />|g' /usr/share/nginx/html/index.html
+
 # Copiar configuración de Nginx
 COPY RestaurantManager.Interface/nginx.conf /etc/nginx/nginx.conf
 
