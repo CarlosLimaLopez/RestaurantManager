@@ -1,0 +1,49 @@
+name: Deploy to Arsys VPS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            # Crear directorio de la aplicación si no existe
+            mkdir -p /opt/restaurantmanager
+            cd /opt/restaurantmanager
+            
+            # Limpiar despliegue anterior
+            if [ -f docker-compose.yml ]; then
+              docker-compose down
+            fi
+            
+            # Clonar o actualizar repositorio
+            if [ -d .git ]; then
+              git fetch origin
+              git reset --hard origin/main
+            else
+              git clone https://github.com/CarlosLimaLopez/RestaurantManager.git .
+              git checkout main
+            fi
+            
+            # Construir y desplegar contenedores
+            docker-compose up -d --build
+            
+            # Limpiar imágenes antiguas
+            docker image prune -f
+            
+            # Mostrar estado
+            docker-compose ps

@@ -17,6 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Interface.Public", "RestaurantManager.Interface.Public\RestaurantManager.Interface.Public.csproj", "{77EA6D93-2021-41AD-8277-475B16A08026}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{FEBD7DA3-4697-49D3-9D2F-CC97051C86EF}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\deploy-to-vps.yml = .github\workflows\deploy-to-vps.yml
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
