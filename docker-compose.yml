@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # API Backend
+  restaurantmanager-api:
+    image: restaurantmanager-api:latest
+    container_name: restaurantmanager-api
+    build:
+      context: .
+      dockerfile: RestaurantManager.API/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__Database=User Id=postgres.kfzzuqjmuscxyzbocwfz;Password=YPVI4dBxq0WRYQW6vwSE;Server=aws-1-eu-west-1.pooler.supabase.com;Port=5432;Database=postgres
+    networks:
+      - restaurantmanager-network
+    restart: unless-stopped
+
+  # Blazor Public Interface
+  restaurantmanager-public:
+    image: restaurantmanager-public:latest
+    container_name: restaurantmanager-public
+    build:
+      context: .
+      dockerfile: RestaurantManager.Interface.Public/Dockerfile
+    ports:
+      - "8000:8080"
+      - "8001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - RestaurantManagerApiAddress=http://restaurantmanager-api:8080/api/
+    depends_on:
+      - restaurantmanager-api
+    networks:
+      - restaurantmanager-network
+    restart: unless-stopped
+
+  # Blazor Admin Interface
+  restaurantmanager-interface:
+    image: restaurantmanager-interface:latest
+    container_name: restaurantmanager-interface
+    build:
+      context: .
+      dockerfile: RestaurantManager.Interface/Dockerfile
+    ports:
+      - "9000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - restaurantmanager-api
+    networks:
+      - restaurantmanager-network
+    restart: unless-stopped
+
+networks:
+  restaurantmanager-network:
+    driver: bridge
