@@ -33,10 +33,10 @@ jobs:
             # Clonar o actualizar repositorio
             if [ -d .git ]; then
               git fetch origin
-              git reset --hard origin/main
+              git reset --hard origin/master
             else
               git clone https://github.com/CarlosLimaLopez/RestaurantManager.git .
-              git checkout main
+              git checkout master
             fi
             
             # Construir y desplegar contenedores
