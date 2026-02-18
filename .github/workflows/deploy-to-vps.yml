@@ -63,34 +63,26 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 30m
           script: |
-            # Crear directorio de la aplicación si no existe
-            mkdir -p /opt/restaurantmanager
-            cd /opt/restaurantmanager
+            set -e
+            cd /opt/restaurantmanager || mkdir -p /opt/restaurantmanager && cd /opt/restaurantmanager
 
-            # Limpiar despliegue anterior
-            if [ -f docker-compose.yml ]; then
-              docker compose down
-            fi
-
-            # Clonar o actualizar repositorio
+            # Actualizar repositorio
             if [ -d .git ]; then
-              git fetch origin
-              git reset --hard origin/master
+              git fetch origin && git reset --hard origin/master
             else
-              git clone https://github.com/${{ github.repository }}.git .
-              git checkout master
+              git clone https://github.com/${{ github.repository }}.git . && git checkout master
             fi
 
-            # Login a GitHub Container Registry
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # Detener contenedores
+            docker compose down --remove-orphans 2>/dev/null || true
 
-            # Descargar y desplegar contenedores (sin construir)
-            docker compose pull
-            docker compose up -d
+            # Descargar y desplegar
+            docker compose pull && docker compose up -d
 
-            # Limpiar imágenes antiguas
-            docker image prune -f
+            # Limpiar
+            docker image prune -af --filter "until=24h"
 
-            # Mostrar estado
+            # Estado final
             docker compose ps
