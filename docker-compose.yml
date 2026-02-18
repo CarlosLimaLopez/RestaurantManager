@@ -35,17 +35,32 @@ services:
 
   # Blazor Admin Interface
   restaurantmanager-interface:
-    image: restaurantmanager-interface:latest
+    image: ghcr.io/carloslimalopez/restaurantmanager-interface:latest
     container_name: restaurantmanager-interface
     build:
       context: .
       dockerfile: RestaurantManager.Interface/Dockerfile
-    ports:
-      - "9000:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
       - restaurantmanager-api
+    networks:
+      - restaurantmanager-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: restaurantmanager-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - restaurantmanager-api
+      - restaurantmanager-public
+      - restaurantmanager-interface
     networks:
       - restaurantmanager-network
     restart: unless-stopped
