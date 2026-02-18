@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{FEBD7DA3-4697-
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\deploy-to-vps.yml = .github\workflows\deploy-to-vps.yml
 		docker-compose.yml = docker-compose.yml
+		nginx\nginx.conf = nginx\nginx.conf
 	EndProjectSection
 EndProject
 Global
