@@ -22,4 +22,4 @@ COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
 # Copiar configuración de Nginx
 COPY RestaurantManager.Interface/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 8080
