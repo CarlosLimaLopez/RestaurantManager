@@ -7,13 +7,52 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push API image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./RestaurantManager.API/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/restaurantmanager-api:latest
+
+      - name: Build and push Public Interface image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./RestaurantManager.Interface.Public/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/restaurantmanager-public:latest
+
+      - name: Build and push Admin Interface image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./RestaurantManager.Interface/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/restaurantmanager-interface:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -35,12 +74,16 @@ jobs:
               git fetch origin
               git reset --hard origin/master
             else
-              git clone https://github.com/CarlosLimaLopez/RestaurantManager.git .
+              git clone https://github.com/${{ github.repository }}.git .
               git checkout master
             fi
 
-            # Construir y desplegar contenedores
-            docker compose up -d --build
+            # Login a GitHub Container Registry
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Descargar y desplegar contenedores (sin construir)
+            docker compose pull
+            docker compose up -d
 
             # Limpiar imágenes antiguas
             docker image prune -f
