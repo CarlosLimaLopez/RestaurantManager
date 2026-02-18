@@ -3,14 +3,11 @@ version: '3.8'
 services:
   # API Backend
   restaurantmanager-api:
-    image: restaurantmanager-api:latest
+    image: ghcr.io/carloslimalopez/restaurantmanager-api:latest
     container_name: restaurantmanager-api
     build:
       context: .
       dockerfile: RestaurantManager.API/Dockerfile
-    ports:
-      - "5000:8080"
-      - "5001:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
@@ -21,14 +18,11 @@ services:
 
   # Blazor Public Interface
   restaurantmanager-public:
-    image: restaurantmanager-public:latest
+    image: ghcr.io/carloslimalopez/restaurantmanager-public:latest
     container_name: restaurantmanager-public
     build:
       context: .
       dockerfile: RestaurantManager.Interface.Public/Dockerfile
-    ports:
-      - "8000:8080"
-      - "8001:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
