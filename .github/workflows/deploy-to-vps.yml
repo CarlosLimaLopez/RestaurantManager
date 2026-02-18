@@ -24,12 +24,12 @@ jobs:
             # Crear directorio de la aplicación si no existe
             mkdir -p /opt/restaurantmanager
             cd /opt/restaurantmanager
-            
+
             # Limpiar despliegue anterior
             if [ -f docker-compose.yml ]; then
-              docker-compose down
+              docker compose down
             fi
-            
+
             # Clonar o actualizar repositorio
             if [ -d .git ]; then
               git fetch origin
@@ -38,12 +38,12 @@ jobs:
               git clone https://github.com/CarlosLimaLopez/RestaurantManager.git .
               git checkout master
             fi
-            
+
             # Construir y desplegar contenedores
-            docker-compose up -d --build
-            
+            docker compose up -d --build
+
             # Limpiar imágenes antiguas
             docker image prune -f
-            
+
             # Mostrar estado
-            docker-compose ps
+            docker compose ps
