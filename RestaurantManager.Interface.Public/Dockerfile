@@ -16,12 +16,6 @@ RUN dotnet build "RestaurantManager.Interface.Public.csproj" -c Release -o /app/
 FROM build AS publish
 RUN dotnet publish "RestaurantManager.Interface.Public.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Verificar que wwwroot se publicó correctamente
-RUN echo "=== Checking wwwroot files ===" && \
-    ls -la /app/publish/wwwroot && \
-    ls -la /app/publish/wwwroot/app.css && \
-    echo "=== app.css found ===" || echo "WARNING: app.css not found"
-
 # Etapa 3: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
