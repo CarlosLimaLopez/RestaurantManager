@@ -16,6 +16,9 @@ RUN dotnet build "RestaurantManager.Interface.Public.csproj" -c Release -o /app/
 FROM build AS publish
 RUN dotnet publish "RestaurantManager.Interface.Public.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+# Verificar que wwwroot se publicó correctamente
+RUN ls -la /app/publish/wwwroot || echo "WARNING: wwwroot folder not found"
+
 # Etapa 3: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app

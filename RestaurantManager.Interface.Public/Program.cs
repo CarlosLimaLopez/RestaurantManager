@@ -25,6 +25,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// HTTPS redirection is handled by nginx reverse proxy
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 app.UseAntiforgery();
 
