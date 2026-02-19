@@ -11,7 +11,12 @@ var restaurantManagerApiAddress = builder.Configuration["RestaurantManagerApiAdd
 if (string.IsNullOrEmpty(restaurantManagerApiAddress))
     throw new Exception("Please configure the RestaurantManagerApiAddress setting in your configuration.");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(restaurantManagerApiAddress!) });
+// Si la dirección es relativa, usar el origin del navegador
+var apiBaseAddress = restaurantManagerApiAddress.StartsWith("/")
+    ? new Uri(new Uri(builder.HostEnvironment.BaseAddress), restaurantManagerApiAddress)
+    : new Uri(restaurantManagerApiAddress);
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = apiBaseAddress });
 
 builder.Services.AddMudServices();
 
