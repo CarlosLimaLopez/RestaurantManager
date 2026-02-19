@@ -131,7 +131,7 @@
             await ReloadGrid();
     }
     
-    void NavigateToActiveMenu(string path) => Navigation.NavigateTo($"/carta/{path}");
+    void NavigateToActiveMenu(string path) => Navigation.NavigateTo($"carta/{path}");
 
-    void NavigateToManageMenu(Guid restaurantId) => Navigation.NavigateTo($"/restaurants/{restaurantId}");
+    void NavigateToManageMenu(Guid restaurantId) => Navigation.NavigateTo($"restaurants/{restaurantId}");
 }
