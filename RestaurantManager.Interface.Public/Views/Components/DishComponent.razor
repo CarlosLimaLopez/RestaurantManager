@@ -56,8 +56,6 @@
 
     private async Task PreviewImage(DishGetResponse dish)
     {
-        var imageUrl = $"{Http.BaseAddress}dishes/{dish.DishId}/image";
-
         var options = new DialogOptions()
         {
             CloseButton = false,
@@ -68,7 +66,7 @@
 
         var parameters = new DialogParameters
         {
-            { "ImageUrl", imageUrl }
+            { "DishId", $"{dish.DishId}" }
         };
 
         await DialogService.ShowAsync<ImagePreviewDialog>(null, parameters, options);
