@@ -231,3 +231,7 @@ code {
     border-radius: 0px !important;
     border-left: 0px solid !important;
 }
+
+.image-preview .mud-dialog-content{
+    padding: 8px !important;
+}

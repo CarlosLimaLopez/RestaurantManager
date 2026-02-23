@@ -35,7 +35,8 @@
                         Description = d.Description,
                         Prize = d.Prize,
                         Order = d.Order,
-                        Allergens = d.Allergens.Select(a => a.ToResponse()).ToList()
+                        Allergens = d.Allergens.Select(a => a.ToResponse()).ToList(),
+                        HasImage = d.HasImage
                     }).OrderBy(d => d.Order).ToList()
                 }).OrderBy(s => s.Order).ToArray()
             }).ToArray()

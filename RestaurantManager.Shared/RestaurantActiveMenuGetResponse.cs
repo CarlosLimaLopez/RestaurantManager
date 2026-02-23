@@ -87,11 +87,13 @@
         {
             return new DishGetResponse
             {
+                DishId = dish.Id,
                 Name = dish.Name,
                 Order = dish.Order,
                 Description = dish.Description,
                 Prize = dish.Prize,
-                Allergens = dish.Allergens?.Select(a => a.ToResponse()).ToList() ?? []
+                Allergens = dish.Allergens?.Select(a => a.ToResponse()).ToList() ?? [],
+                HasImage = dish.HasImage
             };
         }
     }

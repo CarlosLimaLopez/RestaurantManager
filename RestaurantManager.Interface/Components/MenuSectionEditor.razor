@@ -2,6 +2,7 @@
 @using RestaurantManager.MenuSections
 @using RestaurantManager.Dishes
 @using static RestaurantManager.Interface.Components.AllegernsSelectorDialog
+@using Microsoft.AspNetCore.Components.Forms
 @inject IDialogService DialogService
 
 <MudPaper Elevation="0" Class="section-paper pa-0 pt-4 ml-2 mr-2 pb-4">
@@ -61,6 +62,7 @@
                         <col />                       <!-- Descripción (Sin ancho para que sea flexible) -->
                         <col style="width: 100px;" /> <!-- Precio -->
                         <col style="width: 100px;" /> <!-- Alérgenos -->
+                        <col style="width: 100px;" /> <!-- Imagen -->
                         <col style="width: 30px;" /> <!-- Eliminar -->
                     </ColGroup>
                     <Columns>
@@ -78,6 +80,33 @@
                                     @foreach (var allergen in context.Item.Allergens)
                                     {
                                         <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name.ToString()" />
+                                    }
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Title="Imagen" Sortable="false" Filterable="false" Editable="false">
+                            <CellTemplate Context="context">
+                                <MudStack Row="true"
+                                          Spacing="1"
+                                          Justify="Justify.Center"
+                                          AlignItems="AlignItems.Center">
+                                    @if (context.Item.HasImage)
+                                    {
+                                        <MudIconButton Class="mid-icon"
+                                                       Icon=@($"fa-solid fa-eye")
+                                                       OnClick="@(() => PreviewImage(context.Item))" />
+                                        <MudIconButton Class="mid-icon"
+                                                       Icon=@($"fa-solid fa-trash")
+                                                       OnClick="@(() => DeleteImage(context.Item))" />
+                                    }
+                                    else
+                                    {
+                                        <MudFileUpload T="IBrowserFile" FilesChanged="@(async (file) => await UploadImage(context.Item, file))">
+                                            <ActivatorContent>
+                                                <MudIconButton Class="mid-icon"
+                                                               Icon=@($"fa-solid fa-upload") />
+                                            </ActivatorContent>
+                                        </MudFileUpload>
                                     }
                                 </MudStack>
                             </CellTemplate>
@@ -183,5 +212,49 @@
                 await UpdateDish(d);
             }
         }
+    }
+
+    private async Task UploadImage(DishGetResponse dish, IBrowserFile? file)
+    {
+        if (file == null)
+            return;
+
+        var content = new MultipartFormDataContent();
+        var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 10));
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+        content.Add(fileContent, "file", file.Name);
+
+        var response = await Http.PostAsync($"dishes/{dish.DishId}/image", content);
+
+        if (response.IsSuccessStatusCode)
+            await OnReloadRequired.InvokeAsync();
+    }
+
+    private async Task PreviewImage(DishGetResponse dish)
+    {
+        var imageUrl = $"{Http.BaseAddress}dishes/{dish.DishId}/image";
+
+        var options = new DialogOptions()
+        {
+            CloseButton = false,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = false,
+            NoHeader = true
+        };
+
+        var parameters = new DialogParameters
+        {
+            { "ImageUrl", imageUrl }
+        };
+
+        await DialogService.ShowAsync<ImagePreviewDialog>(null, parameters, options);
+    }
+
+    private async Task DeleteImage(DishGetResponse dish)
+    {
+        var response = await Http.DeleteAsync($"dishes/{dish.DishId}/image");
+
+        if (response.IsSuccessStatusCode)
+            await OnReloadRequired.InvokeAsync();
     }
 }
