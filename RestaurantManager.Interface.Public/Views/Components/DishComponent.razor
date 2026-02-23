@@ -1,17 +1,33 @@
 ﻿@using RestaurantManager.Restaurants
 @using RestaurantManager.Dishes
+@inject IDialogService DialogService
 
 <MudGrid AlignItems="AlignItems.Center" Class="mb-2">
-    <MudItem xs="8" Class="mt-1">
-        <MudText Class="dish-name" Display="Inline">@DishDto.Name</MudText>
-    </MudItem>
 
-    <MudItem xs="4" Class="d-flex justify-end align-center mt-2">
-        @if (!string.IsNullOrWhiteSpace(DishDto.Prize))
-        {
-            <MudText Class="dish-price">@DishDto.Prize</MudText>
-        }
-    </MudItem>
+        <MudItem xs="7" Class="mt-2">
+        <MudStack Row="true"
+                  Spacing="1"
+                  Justify="Justify.FlexStart"
+                  AlignItems="AlignItems.Center">
+            <MudText Class="dish-name" Display="Inline">@DishDto.Name</MudText>
+            @if (DishDto.HasImage)
+            {
+                <MudIconButton Class="mid-icon"
+                               Icon=@($"fa-solid fa-eye")
+                               OnClick="@(() => PreviewImage(DishDto))" />
+            }
+        </MudStack>
+            
+        </MudItem>
+
+        <MudItem xs="4" Class="d-flex justify-end align-center mt-2">
+            @if (!string.IsNullOrWhiteSpace(DishDto.Prize))
+            {
+                <MudText Class="dish-price">@DishDto.Prize</MudText>
+            }
+        </MudItem>
+    
+
 
     @if (!string.IsNullOrWhiteSpace(DishDto.Description))
     {
@@ -34,4 +50,27 @@
 @code {
     [Parameter, EditorRequired]
     public DishGetResponse DishDto { get; set; } = default!;
+
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    private async Task PreviewImage(DishGetResponse dish)
+    {
+        var imageUrl = $"{Http.BaseAddress}dishes/{dish.DishId}/image";
+
+        var options = new DialogOptions()
+        {
+            CloseButton = false,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = false,
+            NoHeader = true
+        };
+
+        var parameters = new DialogParameters
+        {
+            { "ImageUrl", imageUrl }
+        };
+
+        await DialogService.ShowAsync<ImagePreviewDialog>(null, parameters, options);
+    }
 }

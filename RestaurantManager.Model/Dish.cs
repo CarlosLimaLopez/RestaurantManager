@@ -26,5 +26,13 @@ namespace RestaurantManager.Dishes
         public IEnumerable<AllergenType> Allergens { get; set; } = [];
         public string? Description { get; set; } = string.Empty;
         public string? Prize { get; set; } = string.Empty;
+        public string? ImageName { get; set; } = null;
+        public bool HasImage 
+        { 
+            get 
+            { 
+                return !string.IsNullOrEmpty(ImageName); 
+            } 
+        }
     }
 }

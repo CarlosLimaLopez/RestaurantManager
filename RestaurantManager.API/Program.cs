@@ -12,6 +12,8 @@ builder.Services.AddUnitOfWork();
 builder.Services.AddRepositories();
 builder.Services.AddServices();
 
+builder.Services.AddScoped<IImageService, ImageService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -47,6 +49,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 

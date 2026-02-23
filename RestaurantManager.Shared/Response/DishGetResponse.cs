@@ -10,5 +10,6 @@
         public string? Description { get; set; } = null;
         public string? Prize { get; set; } = null;
         public List<AllergenGetResponse> Allergens { get; set; } = [];
+        public bool HasImage { get; set; } = false;
     }
 }
