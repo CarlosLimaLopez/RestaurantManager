@@ -111,7 +111,7 @@ namespace RestaurantManager.Restaurants
 
                 foreach (var dish in section.Dishes)
                 {
-                    var newDish = new Dish(dish.Name, dish.Order, dish.Allergens, dish.Prize, dish.Description);
+                    var newDish = new Dish(dish.Name, dish.Order, dish.Allergens, dish.Prize, dish.Description, dish.ImageName);
 
                     newSection.Dishes.Add(newDish);
                 }

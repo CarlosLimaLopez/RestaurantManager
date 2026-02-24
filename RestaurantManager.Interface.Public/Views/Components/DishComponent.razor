@@ -4,30 +4,32 @@
 
 <MudGrid AlignItems="AlignItems.Center" Class="mb-2">
 
-        <MudItem xs="7" Class="mt-2">
+    <MudItem xs="12" Class="mt-2">
         <MudStack Row="true"
                   Spacing="1"
                   Justify="Justify.FlexStart"
                   AlignItems="AlignItems.Center">
-            <MudText Class="dish-name" Display="Inline">@DishDto.Name</MudText>
             @if (DishDto.HasImage)
             {
-                <MudIconButton Class="mid-icon"
-                               Icon=@($"fa-solid fa-eye")
-                               OnClick="@(() => PreviewImage(DishDto))" />
+                <div Style="color: #424242 !important;">
+                    <MudIconButton 
+                        Class="mid-icon"
+                        Icon=@($"fa-solid fa-eye")
+                        OnClick="@(() => PreviewImage(DishDto))" />
+                </div>
             }
-        </MudStack>
-            
-        </MudItem>
-
-        <MudItem xs="4" Class="d-flex justify-end align-center mt-2">
+            <div style="flex: 1 !important">
+                <MudText Class="dish-name">@DishDto.Name</MudText>
+            </div>
             @if (!string.IsNullOrWhiteSpace(DishDto.Prize))
             {
-                <MudText Class="dish-price">@DishDto.Prize</MudText>
+                <div Style="width: 80px !important;text-align: right;">
+                    <MudText Class="dish-price">@DishDto.Prize</MudText>
+                </div>
             }
-        </MudItem>
-    
-
+        </MudStack>
+    </MudItem>
+       
 
     @if (!string.IsNullOrWhiteSpace(DishDto.Description))
     {
@@ -41,7 +43,7 @@
         <MudItem xs="12" Class="pt-0">
             @foreach (var allergen in DishDto.Allergens)
             {
-                <MudIcon Class="small-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name.ToString()" />
+                <MudIcon Class="small-icon dish-allegern-icon" Size="Size.Small" Icon=@($"fa-solid fa-{allergen.Icon}") Title="@allergen.Name.ToString()" />
             }
         </MudItem>
     }

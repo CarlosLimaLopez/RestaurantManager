@@ -10,13 +10,14 @@ namespace RestaurantManager.Dishes
         public Dish() { }
 #pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
 
-        public Dish(string name, int order, IEnumerable<AllergenType> allergens, string? prize, string? description = null)
+        public Dish(string name, int order, IEnumerable<AllergenType> allergens, string? prize, string? description = null, string? imageName = null)
         {
             Name = name;
             Order = order;
             Allergens = allergens;
             Prize = prize;
             Description = description;
+            ImageName = imageName;
         }
 
         [Key]
