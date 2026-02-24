@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddSignalR(options =>
+{
+    options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+    options.KeepAliveInterval = TimeSpan.FromSeconds(30);
+});
+
 var restaurantManagerApiAddress = builder.Configuration["RestaurantManagerApiAddress"];
 if (string.IsNullOrEmpty(restaurantManagerApiAddress))
     throw new Exception("Please configure the RestaurantManagerApiAddress setting in your configuration.");
