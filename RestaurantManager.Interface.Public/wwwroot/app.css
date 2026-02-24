@@ -243,4 +243,5 @@ code {
 
 .image-preview .mud-dialog-content {
     padding: 8px !important;
+    max-width: 75vw;
 }
