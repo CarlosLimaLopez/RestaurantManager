@@ -12,6 +12,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__Database=User Id=postgres.kfzzuqjmuscxyzbocwfz;Password=YPVI4dBxq0WRYQW6vwSE;Server=aws-1-eu-west-1.pooler.supabase.com;Port=5432;Database=postgres
+    volumes:
+      - dishes_data:/app/wwwroot/images/dishes
     networks:
       - restaurantmanager-network
     restart: unless-stopped
@@ -71,3 +73,7 @@ services:
 networks:
   restaurantmanager-network:
     driver: bridge
+
+volumes:
+  dishes_data:
+    driver: local

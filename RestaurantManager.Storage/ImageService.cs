@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace RestaurantManager.Services
@@ -11,25 +12,23 @@ namespace RestaurantManager.Services
 
     public class ImageService : IImageService
     {
-        public async Task<byte[]> GetDishImageAsync(string fileName)
+        private readonly string _imagesFolder;
+
+        public ImageService(IWebHostEnvironment env)
         {
-            var filePath = Path.Combine("wwwroot/images/dishes", fileName);
+            _imagesFolder = Path.Combine(env.ContentRootPath, "wwwroot", "images", "dishes");
 
-            if (!File.Exists(filePath))
-                return Array.Empty<byte>();
-
-            return await File.ReadAllBytesAsync(filePath);
+            if (!Directory.Exists(_imagesFolder))
+                Directory.CreateDirectory(_imagesFolder);
         }
 
         public async Task<string?> SaveDishImageAsync(IFormFile file)
         {
+            if (file == null || file.Length == 0) return null;
+
             var extension = Path.GetExtension(file.FileName);
             var fileName = $"{Guid.NewGuid()}{extension}";
-            var uploadsFolder = "wwwroot/images/dishes";
-            var filePath = Path.Combine(uploadsFolder, fileName);
-
-            if (File.Exists(filePath))
-                File.Delete(filePath);
+            var filePath = Path.Combine(_imagesFolder, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -39,9 +38,21 @@ namespace RestaurantManager.Services
             return fileName;
         }
 
+        public async Task<byte[]> GetDishImageAsync(string fileName)
+        {
+            var filePath = Path.Combine(_imagesFolder, fileName);
+
+            if (!File.Exists(filePath))
+                return Array.Empty<byte>();
+
+            return await File.ReadAllBytesAsync(filePath);
+        }
+
         public Task<bool> DeleteDishImageAsync(string fileName)
         {
-            var filePath = Path.Combine("wwwroot/images/dishes", fileName);
+            // Si fileName viene con la ruta completa o URL, extrae solo el nombre del archivo
+            var pureFileName = Path.GetFileName(fileName);
+            var filePath = Path.Combine(_imagesFolder, pureFileName);
 
             if (File.Exists(filePath))
             {
