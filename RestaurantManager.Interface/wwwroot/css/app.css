@@ -232,6 +232,7 @@ code {
     border-left: 0px solid !important;
 }
 
-.image-preview .mud-dialog-content{
+.image-preview .mud-dialog-content {
     padding: 8px !important;
+    max-width: 75vw;
 }
