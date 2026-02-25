@@ -239,3 +239,67 @@ code {
     padding: 8px !important;
     max-width: 75vw;
 }
+
+.home-pricing-bar {
+    background: #f9fafb;
+    border-radius: 12px;
+}
+
+.home-card-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.home-card-body {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+    .home-card-body.success {
+        color: #16a34a;
+    }
+
+.home-card-note {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.home-header-title {
+    font-size: 2rem; /* ≈ h4 */
+    font-weight: 700;
+    line-height: 1.2;
+    color: #111827;
+}
+
+@media (max-width: 600px) {
+    .home-header-title {
+        font-size: 1.6rem;
+    }
+}
+
+.restaurant-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 24px #b2dfdb;
+}
+
+.whatsapp-fab {
+    transition: box-shadow 0.2s;
+    /* La animación pulse se mantiene igual */
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 #16a34a55;
+    }
+
+    70% {
+        box-shadow: 0 0 0 12px #16a34a11;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 #16a34a55;
+    }
+}

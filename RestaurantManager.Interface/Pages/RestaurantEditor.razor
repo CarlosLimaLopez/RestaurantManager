@@ -10,6 +10,12 @@
 <MudContainer Class="pa-8" MaxWidth="MaxWidth.Large" Style="background-color: white">
     @if (Restaurant != null)
     {
+        <PageTitle>@Restaurant.Name - Administración</PageTitle>
+
+        <HeadContent>
+            <link rel="icon" href="@Restaurant.LogoPath" />
+        </HeadContent>
+
         <MudGrid>
 
             <MudItem xs="8" sm="9">
