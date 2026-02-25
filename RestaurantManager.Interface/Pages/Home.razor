@@ -1,31 +1,88 @@
 ﻿@page "/"
 @using RestaurantManager.Restaurants
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
-    <MudGrid>
-        @foreach (var restaurant in Restaurants)
-        {
-            <MudItem xs="6" md="3">
-                <NavLink href="@($"/{restaurant.Path}")">
-                    <MudCard Class="d-flex flex-column align-center" Style="height: 100%;" Elevation="2">
-                        <MudCardContent Class="d-flex flex-column align-center justify-center flex-grow-1">
-                            @if (!string.IsNullOrEmpty(restaurant.LogoPath))
-                            {
-                                <MudImage Src="@restaurant.LogoPath" Alt="@restaurant.Name" Class="rounded mb-3" Width="100" Height="100" ObjectFit="ObjectFit.Contain" />
-                            }
-                            else
-                            {
-                                <MudIcon Icon="@Icons.Material.Filled.Restaurant" Size="Size.Large" Class="mb-3" Style="font-size: 100px;" />
-                            }
-                            <MudText Typo="Typo.h6" Align="Align.Center" Style="@GetColorStyle(restaurant.NameColor)">
-                                @restaurant.Name
-                            </MudText>
-                        </MudCardContent>
-                    </MudCard>
-                </NavLink>
-            </MudItem>
-        }
-    </MudGrid>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-2" Style="background: linear-gradient(135deg, #f9fafb 60%, #dddddd 100%); border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); padding: 32px 0;">
+
+    <MudPaper Elevation="0" Class="home-pricing-bar pa-6" Style="border-radius: 18px;">
+        <MudContainer MaxWidth="MaxWidth.Large">
+
+            <MudGrid>
+                <MudItem xs="12" md="12" Class="mt-4">
+                    <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
+                        Digitaliza tu carta y hazla accesible por QR
+                    </MudText>
+                </MudItem>
+
+                <MudDivider Class="mt-6 mb-2" />
+
+                <MudItem xs="12" md="4">
+                    <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4" Style="background: #f5f5f5; border-radius: 12px; box-shadow: 0 2px 8px #e0e0e0;">
+                        <MudText Class="home-card-label" Style="color: #1a2936;">Primer mes</MudText>
+                        <MudText Class="home-card-body" Style="color: #388e3c;">GRATIS</MudText>
+                        <MudText Class="home-card-note" Style="color: #757575;">Sin compromiso, prueba sin coste</MudText>
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="12" md="4">
+                    <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4" Style="background: #f5f5f5; border-radius: 12px; box-shadow: 0 2px 8px #e0e0e0;">
+                        <MudText Class="home-card-label" Style="color: #1a2936;">Suscripción anual</MudText>
+                        <MudText Class="home-card-body" Style="color: #bfa14a;">200&nbsp;€</MudText>
+                        <MudText Class="home-card-note" Style="color: #757575;">Incluye soporte y actualizaciones</MudText>
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="12" md="4">
+                    <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4" Style="background: #f5f5f5; border-radius: 12px; box-shadow: 0 2px 8px #e0e0e0;">
+                        <MudText Class="home-card-label" Style="color: #1a2936;">Actualización de carta</MudText>
+                        <MudText Class="home-card-body" Style="color: #1a2936;">10&nbsp;€</MudText>
+                        <MudText Class="home-card-note" Style="color: #757575;">Solicítalo con 3 días de antelación</MudText>
+                    </MudStack>
+                </MudItem>
+
+                <MudDivider Class="mt-8" />
+
+                <MudItem xs="12" md="12" Class="mb-4">
+                    <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
+                        Descubre cómo otros restaurantes presentan su carta
+                    </MudText>
+                </MudItem>
+
+                @foreach (var restaurant in Restaurants)
+                {
+                    <MudItem xs="6" md="3">
+                        <NavLink href="@($"/{restaurant.Path}")" Style="text-decoration: none;">
+                            <MudCard Class="d-flex flex-column align-center restaurant-card"
+                                     Style="height: 100%; border-radius: 16px; box-shadow: 0 2px 12px #eee; transition: transform 0.2s, box-shadow 0.2s;"
+                                     Elevation="2">
+                                <MudCardContent Class="d-flex flex-column align-center justify-center flex-grow-1">
+                                    @if (!string.IsNullOrEmpty(restaurant.LogoPath))
+                                    {
+                                        <MudImage Src="@restaurant.LogoPath" Alt="@restaurant.Name" Class="rounded mb-3 logo" Width="100" Height="100" ObjectFit="ObjectFit.Contain" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Restaurant" Size="Size.Large" Class="mb-3" Style="font-size: 100px; color: var(--color-primary);" />
+                                    }
+                                    <MudText Typo="Typo.h6" Align="Align.Center" Style="@GetColorStyle(restaurant.NameColor)">
+                                        @restaurant.Name
+                                    </MudText>
+                                </MudCardContent>
+                            </MudCard>
+                        </NavLink>
+                    </MudItem>
+                }
+            </MudGrid>
+
+        </MudContainer>
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Success"
+                   Class="whatsapp-fab"
+                   Style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 16px #16a34a55;"
+                   Href="https://wa.me/614977276" Target="_blank">
+            <MudIcon Icon="@Icons.Custom.Brands.WhatsApp" Size="Size.Large" />
+        </MudButton>
+    </MudPaper>    
 </MudContainer>
 
 @code{

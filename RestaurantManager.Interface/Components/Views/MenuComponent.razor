@@ -4,6 +4,12 @@
 <MudPaper Elevation="0" Class="pa-2 pa-sm-8">
     @if (RestaurantActiveMenu != null)
     {
+        <PageTitle>@RestaurantActiveMenu.Name</PageTitle>
+
+        <HeadContent>
+            <link rel="icon" href="@RestaurantActiveMenu.LogoPath" />
+        </HeadContent>
+
         <HeaderComponent HeaderDto="@RestaurantActiveMenu" />
 
         if(RestaurantActiveMenu.ActiveMenu != null)
@@ -51,6 +57,8 @@
             foreach (var section in RestaurantActiveMenu.ActiveMenu.Sections)
                 section.Dishes = section.Dishes.OrderBy(d => d.Order).ToList();
         }
+
+        StateHasChanged();
     }
 
     private Task<RestaurantActiveMenuGetResponse?> GetRestaurantActiveMenu(CancellationToken cancellationToken)
