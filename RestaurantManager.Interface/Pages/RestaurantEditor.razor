@@ -1,9 +1,10 @@
-﻿@page "/restaurants/{RestaurantId:guid}"
+﻿@page "/admin/restaurants/{RestaurantId:guid}"
 
-@using RestaurantManager.Interface.Components
-@using RestaurantManager.Restaurants
 @using RestaurantManager.Menus
-@using static RestaurantManager.Interface.Components.MenuInsertDialog
+@using RestaurantManager.Restaurants
+@using RestaurantManager.Interface.Components
+@using RestaurantManager.Interface.Components.Dialogs
+@using RestaurantManager.Interface.Components.Editors
 @inject IDialogService DialogService
 
 <MudContainer Class="pa-8" MaxWidth="MaxWidth.Large" Style="background-color: white">
@@ -63,7 +64,7 @@
             <MudItem xs="12" Class="pt-0">
                 @if (Restaurant?.Menus.Any() == true && SelectedMenu != null)
                 {
-                    <RestaurantMenuEditor MenuDto="@SelectedMenu" OnReloadRequired="@ReloadRestaurant" />
+                    <MenuEditor MenuDto="@SelectedMenu" OnReloadRequired="@ReloadRestaurant" />
                 }
             </MudItem>
         </MudGrid>                
@@ -142,12 +143,12 @@
                 FullWidth = true
             };
 
-        var parameters = new DialogParameters<MenuInsertDialog>
+        var parameters = new DialogParameters<InsertMenuDialog>
         {
-            { x => x.Parameters, new MenuInsertDialogParameters { RestaurantId = Restaurant!.Id } }
+            { x => x.Parameters, new InsertMenuDialog.InsertMenuDialogParameters { RestaurantId = Restaurant!.Id } }
         };
 
-        var dialog = await DialogService.ShowAsync<MenuInsertDialog>("Crear menú", parameters, options);
+        var dialog = await DialogService.ShowAsync<InsertMenuDialog>("Crear menú", parameters, options);
 
         var result = await dialog.Result;
 
@@ -166,7 +167,7 @@
 
         var parameters = new DialogParameters<DuplicateMenuDialog>
         {
-            { x => x.Parameters, new DuplicateMenuDialog.MenuInsertDialogParameters { RestaurantId = Restaurant!.Id, MenuId = SelectedMenu!.MenuId } }
+            { x => x.Parameters, new DuplicateMenuDialog.DuplicateMenuDialogParameters { RestaurantId = Restaurant!.Id, MenuId = SelectedMenu!.MenuId } }
         };
 
         var dialog = await DialogService.ShowAsync<DuplicateMenuDialog>("Duplicar menú", parameters, options);

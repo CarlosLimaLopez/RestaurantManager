@@ -5,25 +5,25 @@
 <MudPaper Elevation="0" Class="pa-1 mb-4">
 
     <MudText Class="mb-1 menu-section-name" Style="@NameStyle">
-        @MenuSectionDto.Name
+        @SectionDto.Name
     </MudText>
 
-    @foreach (var dish in @MenuSectionDto.Dishes)
+    @foreach (var dish in SectionDto.Dishes)
     {
-        <MenuDish MenuDishDto="@dish" />
+        <DishComponent DishDto="@dish" />
     }
 
-    @if (!string.IsNullOrWhiteSpace(@MenuSectionDto.Note))
+    @if (!string.IsNullOrWhiteSpace(SectionDto.Note))
     {
         <MudText Class="mt-6 menu-section-note">
-            @MenuSectionDto.Note
+            @SectionDto.Note
         </MudText>
     }
 </MudPaper>
 
 @code {
     [Parameter, EditorRequired]
-    public MenuSectionGetResponse MenuSectionDto { get; set; } = default!;
+    public MenuSectionGetResponse SectionDto { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public string? NameSectionColor { get; set; } = default!;

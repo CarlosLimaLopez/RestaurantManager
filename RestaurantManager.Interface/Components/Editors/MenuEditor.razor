@@ -1,7 +1,8 @@
-﻿@using RestaurantManager.Restaurants
+﻿@inject IDialogService DialogService
+
 @using RestaurantManager.Menus
-@using static RestaurantManager.Interface.Components.SectionInsertDialog
-@inject IDialogService DialogService
+@using RestaurantManager.Restaurants
+@using RestaurantManager.Interface.Components.Dialogs
 
 <MudPaper Class="mt-0 pt-0" Elevation="4">
     <MudForm FieldChanged="SaveChanges">
@@ -46,7 +47,7 @@
                 @foreach (var sectionItem in MenuDto.Sections)
                 {
                     <MudItem xs="12" Class="section-item mt-0 pt-0">
-                        <MenuSectionEditor MenuSectionDto="@sectionItem" OnReloadRequired="@ReloadSection" />
+                        <SectionEditor MenuSectionDto="@sectionItem" OnReloadRequired="@ReloadSection" />
                     </MudItem>
                 }
             }
@@ -81,12 +82,12 @@
             FullWidth = true
         };
 
-        var parameters = new DialogParameters<SectionInsertDialog>
+        var parameters = new DialogParameters<InsertSectionDialog>
         {
-            { x => x.Parameters, new SectionInsertDialogParameters { MenuId = MenuDto!.MenuId } }
+            { x => x.Parameters, new InsertSectionDialog.SectionInsertDialogParameters { MenuId = MenuDto!.MenuId } }
         };
 
-        var dialog = await DialogService.ShowAsync<SectionInsertDialog>("Crear sección", parameters, options);
+        var dialog = await DialogService.ShowAsync<InsertSectionDialog>("Crear sección", parameters, options);
 
         var result = await dialog.Result;
 

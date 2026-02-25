@@ -21,7 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{FEBD7DA3-4697-
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\deploy-to-vps.yml = .github\workflows\deploy-to-vps.yml
 		docker-compose.yml = docker-compose.yml
+		docker-compose.local.yml = docker-compose.local.yml
 		nginx\nginx.conf = nginx\nginx.conf
+		nginx\nginx.local.conf = nginx\nginx.local.conf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Storage", "RestaurantManager.Storage\RestaurantManager.Storage.csproj", "{1C48CE21-AB64-4088-8913-F6B19172FAD5}"

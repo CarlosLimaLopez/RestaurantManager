@@ -23,7 +23,6 @@ RUN dotnet publish "RestaurantManager.API.csproj" -c Release -o /app/publish /p:
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 # Copiar los archivos publicados
 COPY --from=publish /app/publish .
