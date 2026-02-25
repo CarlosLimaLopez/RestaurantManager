@@ -1,6 +1,7 @@
-﻿@using RestaurantManager.Menus
+﻿@inject IDialogService DialogService
+
+@using RestaurantManager.Menus
 @using RestaurantManager.Restaurants
-@inject IDialogService DialogService
 
 <MudDialog>
     <DialogContent>
@@ -16,7 +17,7 @@
     private HttpClient Http { get; set; } = default!;
 
     [Parameter]
-    public required MenuInsertDialogParameters Parameters { get; set; }
+    public required DuplicateMenuDialogParameters Parameters { get; set; }
 
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; } = null!;
@@ -44,7 +45,7 @@
             MudDialog.Close(DialogResult.Ok(true));
     }
 
-    public class MenuInsertDialogParameters
+    public class DuplicateMenuDialogParameters
     {
         public Guid RestaurantId { get; init; }
         public Guid MenuId { get; init; }

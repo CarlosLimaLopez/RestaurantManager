@@ -36,14 +36,6 @@ jobs:
           push: true
           tags: ghcr.io/${{ steps.repo_owner.outputs.owner }}/restaurantmanager-api:latest
 
-      - name: Build and push Public Interface image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./RestaurantManager.Interface.Public/Dockerfile
-          push: true
-          tags: ghcr.io/${{ steps.repo_owner.outputs.owner }}/restaurantmanager-public:latest
-
       - name: Build and push Admin Interface image
         uses: docker/build-push-action@v5
         with:

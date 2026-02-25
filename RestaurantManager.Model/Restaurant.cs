@@ -28,7 +28,7 @@ namespace RestaurantManager.Restaurants
         public Menu? ActiveMenu { 
             get 
             { 
-                return GetActiveMenu(DateOnly.FromDateTime(DateTime.Today)); 
+                return GetActiveMenu(); 
             } 
         }
         public string? NameColor { get; set; } = null;
@@ -37,10 +37,14 @@ namespace RestaurantManager.Restaurants
         public string? LogoPath { get; set; } = null;
 
         public void AddMenu(Menu menu) => Menus.Add(menu);
-        
-        public Menu? GetActiveMenu(DateOnly date)
-            => Menus
+
+        public Menu? GetActiveMenu()
+        {
+            var now = DateTime.Now;
+            var date = DateOnly.FromDateTime(now.Hour < 6 ? now.AddDays(-1) : now);
+            return Menus
                 .Where(m => m.ActivateAt <= date)
                 .MaxBy(m => m.ActivateAt);
+        }
     }
 }

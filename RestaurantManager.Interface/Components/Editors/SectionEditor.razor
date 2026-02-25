@@ -1,9 +1,11 @@
-﻿@using RestaurantManager.Allergens
+﻿@inject IDialogService DialogService
+
+@using Microsoft.AspNetCore.Components.Forms
+
+@using RestaurantManager.Allergens
 @using RestaurantManager.MenuSections
 @using RestaurantManager.Dishes
-@using static RestaurantManager.Interface.Components.AllegernsSelectorDialog
-@using Microsoft.AspNetCore.Components.Forms
-@inject IDialogService DialogService
+@using RestaurantManager.Interface.Components.Dialogs
 
 <MudPaper Elevation="0" Class="section-paper pa-0 pt-4 ml-2 mr-2 pb-4">
     <MudForm FieldChanged="SaveChanges">
@@ -196,7 +198,7 @@
 
         var parameters = new DialogParameters<AllegernsSelectorDialog>
         {
-            { x => x.Parameters, new AllegernsSelectorDialogParameters { DishId = d.DishId, OriginalAllergens = d.Allergens.ToList() } }
+            { x => x.Parameters, new AllegernsSelectorDialog.AllegernsSelectorDialogParameters { DishId = d.DishId, OriginalAllergens = d.Allergens.ToList() } }
         };
 
         var dialog = await DialogService.ShowAsync<AllegernsSelectorDialog>("Seleccionar alérgenos", parameters, options);
@@ -232,8 +234,6 @@
 
     private async Task PreviewImage(DishGetResponse dish)
     {
-        var imageUrl = $"{Http.BaseAddress}dishes/{dish.DishId}/image";
-
         var options = new DialogOptions()
         {
             CloseButton = false,
@@ -244,10 +244,10 @@
 
         var parameters = new DialogParameters
         {
-            { "ImageUrl", imageUrl }
+            { "DishId", $"{dish.DishId}" }
         };
 
-        await DialogService.ShowAsync<ImagePreviewDialog>(null, parameters, options);
+        await DialogService.ShowAsync<PreviewImageDialog>(null, parameters, options);
     }
 
     private async Task DeleteImage(DishGetResponse dish)

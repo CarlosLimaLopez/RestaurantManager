@@ -1,0 +1,38 @@
+﻿@using RestaurantManager.Restaurants
+
+<MudPaper Elevation="0" Class="pa-2">
+
+    <MudGrid AlignItems="AlignItems.Center">
+
+        <MudItem xs="8" sm="9">
+            <MudText Class="restaurant-name" Style="@NameStyle">
+                @HeaderDto.Name
+            </MudText>
+
+            @if (!string.IsNullOrWhiteSpace(HeaderDto.Description))
+            {
+                <MudText Class="restaurant-description" Style="@NameStyle">
+                    @HeaderDto.Description
+                </MudText>
+            }
+        </MudItem>
+        @if (!string.IsNullOrWhiteSpace(HeaderDto.LogoPath))
+        {
+            <MudItem xs="4" sm="3" Class="d-flex justify-center justify-sm-end">
+                <MudImage Src="@HeaderDto.LogoPath" Class="logo" />
+            </MudItem>
+        }
+
+    </MudGrid>
+
+</MudPaper>
+
+@code {
+    [Parameter, EditorRequired]
+    public RestaurantActiveMenuGetResponse HeaderDto { get; set; } = default!;
+
+    private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(HeaderDto.NameColor) ? "inherit" : HeaderDto.NameColor)}";
+
+    private string DescriptionStyle => $"color:{(string.IsNullOrWhiteSpace(HeaderDto.DescriptionColor) ? "inherit" : HeaderDto.DescriptionColor)}";
+
+}
