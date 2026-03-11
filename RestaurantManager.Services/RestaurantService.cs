@@ -45,6 +45,7 @@ namespace RestaurantManager.Restaurants
 
             return (restaurant, []);
         }
+
         public async Task<(Restaurant? restaurant, IEnumerable<ValidationResult> errors)> TryUpdateRestaurant(Guid id, Restaurant updateRestaurant)
         {
             var restaurant = await _restaurantRepository.GetRestaurantById(id);
@@ -57,6 +58,7 @@ namespace RestaurantManager.Restaurants
             restaurant.Description = updateRestaurant.Description;
             restaurant.DescriptionColor = updateRestaurant.DescriptionColor;
             restaurant.LogoPath = updateRestaurant.LogoPath;
+            restaurant.Public = updateRestaurant.Public;
 
             await _unitOfWork.CompleteAsync();
 

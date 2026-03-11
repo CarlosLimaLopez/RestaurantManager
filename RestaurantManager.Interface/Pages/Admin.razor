@@ -36,6 +36,7 @@
             <col style="width: 120px;" /> <!-- Path -->
             <col style="width: 240px;" /> <!-- Logo -->
             <col style="width: 30px;" /> <!-- Active Menu -->
+            <col style="width: 30px;" /> <!-- Public -->
             <col style="width: 30px;" /> <!-- Edit Menus -->
             <col style="width: 30px;" /> <!-- Delete -->
         </ColGroup>
@@ -58,6 +59,19 @@
                             Class="mid-icon"
                             Icon=@($"fa-solid fa-sheet-plastic")
                             OnClick="@(() => NavigateToActiveMenu(context.Item.Path))" />
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Sortable="false" Filterable="false" Editable="false">
+                <CellTemplate Context="context">
+                    <MudStack Row="true"
+                              Justify="Justify.Center"
+                              AlignItems="AlignItems.Center">
+                        <MudIconButton Class="mid-icon"
+                                       Icon="fa-solid fa-eye"
+                                       Style="@GetPublicIconStyle(context.Item.Public)"
+                                       OnClick="@(() => TogglePublic(context.Item))" />
                     </MudStack>
                 </CellTemplate>
             </TemplateColumn>
@@ -126,6 +140,15 @@
         await Http.PutAsJsonAsync<RestaurantUpdateRequest>($"restaurants/{item.Id}", restaurantUpdateRequest, CancellationToken.None);
     }
 
+    private async Task TogglePublic(RestaurantSummaryGetResponse restaurant)
+    {
+        restaurant.Public = !restaurant.Public;
+
+        await UpdateRestaurant(restaurant);
+
+        await ReloadGrid();
+    }
+
     private async Task RemoveRestaurant(Guid restaurantId)
     {
         var response = await Http.DeleteAsync($"restaurants/{restaurantId}", CancellationToken.None);
@@ -137,4 +160,11 @@
     void NavigateToActiveMenu(string path) => Navigation.NavigateTo($"{path}");
 
     void NavigateToManageMenu(Guid restaurantId) => Navigation.NavigateTo($"admin/restaurants/{restaurantId}");
+
+    private string GetPublicIconStyle(bool isPublic)
+    {
+        return isPublic
+            ? "color: #e09364 !important;"
+            : "";
+    }
 }

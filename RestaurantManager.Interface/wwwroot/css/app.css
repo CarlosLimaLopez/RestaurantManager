@@ -294,10 +294,10 @@ code {
     box-shadow: 0 4px 24px #a5a5a5;
 }
 
-.restaurant-card:hover {
-    transform: scale(1.04);
-    box-shadow: 0 4px 24px #b2dfdb;
-}
+    .restaurant-card:hover {
+        transform: scale(1.04);
+        box-shadow: 0 4px 24px #ffc093;
+    }
 
 .whatsapp-fab {
     transition: box-shadow 0.2s;
