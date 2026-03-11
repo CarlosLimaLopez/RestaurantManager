@@ -41,16 +41,58 @@
                 }).OrderBy(s => s.Order).ToArray()
             }).ToArray()
         };
-        
-        public static RestaurantUpdateRequest ToRestaurantUpdateRequest(this RestaurantGetResponse restaurant)
-        => new()
+
+        public static RestaurantUpdateRequest ToRestaurantUpdateRequest(this RestaurantSummaryGetResponse restaurant)
         {
-            Name = restaurant.Name,
-            NameColor = restaurant.NameColor,
-            Path = restaurant.Path,
-            Description = restaurant.Description,
-            DescriptionColor = restaurant.DescriptionColor,
-            LogoPath = restaurant.LogoPath
-        };
+            return new RestaurantUpdateRequest
+            {
+                Name = restaurant.Name,
+                NameColor = restaurant.NameColor,
+                Path = restaurant.Path,
+                Description = restaurant.Description,
+                DescriptionColor = restaurant.DescriptionColor,
+                LogoPath = restaurant.LogoPath,
+                Public = restaurant.Public
+            };
+        }
+
+        public static RestaurantActiveMenuGetResponse ToRestaurantActiveMenuGetResponse(this Restaurant restaurant)
+        {
+            var allergens = restaurant.ActiveMenu == null ? [] : restaurant.ActiveMenu.Sections
+                .SelectMany(s => s.Dishes)
+                .SelectMany(d => d.Allergens)
+                .Distinct()
+                .Select(a => a.ToResponse())
+                .ToList();
+
+            return new RestaurantActiveMenuGetResponse
+            {
+                Name = restaurant.Name,
+                NameColor = restaurant.NameColor,
+                Path = restaurant.Path,
+                Description = restaurant.Description,
+                DescriptionColor = restaurant.DescriptionColor,
+                LogoPath = restaurant.LogoPath,
+                ActiveMenu = restaurant.ActiveMenu != null
+                    ? restaurant.ActiveMenu.ToResponse()
+                    : new MenuGetResponse(),
+                Allergens = allergens
+            };
+        }
+
+        public static RestaurantSummaryGetResponse ToRestaurantSummaryGetResponse(this Restaurant restaurant)
+        {
+            return new RestaurantSummaryGetResponse
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                NameColor = restaurant.NameColor,
+                Path = restaurant.Path,
+                Description = restaurant.Description,
+                DescriptionColor = restaurant.DescriptionColor,
+                LogoPath = restaurant.LogoPath,
+                Public = restaurant.Public
+            };
+        }
     }
 }

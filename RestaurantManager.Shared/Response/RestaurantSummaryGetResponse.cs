@@ -9,5 +9,6 @@
         public string? Description { get; set; } = null;
         public string? DescriptionColor { get; set; } = null;
         public string? LogoPath { get; set; } = null;
+        public bool Public { get; set; } = false;
     }
 }

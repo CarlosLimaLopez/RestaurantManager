@@ -52,7 +52,7 @@
 
             <MudItem xs="12" Class="pt-0">
                 <MudGrid Class="pa-4">
-                    @foreach (var restaurant in Restaurants)
+                    @foreach (var restaurant in Restaurants.Where(r => r.Public))
                     {
                         <MudItem xs="6" md="3">
                             <NavLink href="@($"/{restaurant.Path}")" Style="text-decoration: none;">
