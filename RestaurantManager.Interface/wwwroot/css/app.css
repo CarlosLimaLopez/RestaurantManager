@@ -94,6 +94,11 @@ code {
     font-size: 0.55em !important;
 }
 
+
+.menu-eye-icon .mud-icon-root {
+    font-size: 18px !important;
+}
+
 .allergen-icon {
     display: inline-flex !important;
     width: 11px !important;

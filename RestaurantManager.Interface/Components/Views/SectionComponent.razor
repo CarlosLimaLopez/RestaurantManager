@@ -1,4 +1,5 @@
-﻿@using RestaurantManager.Restaurants
+﻿@using RestaurantManager.Dishes
+@using RestaurantManager.Restaurants
 @using RestaurantManager.Menus
 @using RestaurantManager.MenuSections
 
@@ -10,7 +11,12 @@
 
     @foreach (var dish in SectionDto.Dishes)
     {
-        <DishComponent DishDto="@dish" />
+        var showImageToolTip = false;
+
+        if (ShowDishImageToolTip && dish == DishWithImageToolTip)
+            showImageToolTip = true;
+        
+        <DishComponent DishDto="@dish" ShowImageToolTip="showImageToolTip" />
     }
 
     @if (!string.IsNullOrWhiteSpace(SectionDto.Note))
@@ -21,12 +27,22 @@
     }
 </MudPaper>
 
-@code {
+    @code {
     [Parameter, EditorRequired]
     public MenuSectionGetResponse SectionDto { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public bool ShowDishImageToolTip { get; set; } = false;
 
     [Parameter, EditorRequired]
     public string? NameSectionColor { get; set; } = default!;
 
     private string NameStyle => $"color:{(string.IsNullOrWhiteSpace(NameSectionColor) ? "inherit" : NameSectionColor)}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        DishWithImageToolTip = SectionDto.Dishes.FirstOrDefault(d => d.HasImage);
+    }
+
+    private DishGetResponse? DishWithImageToolTip = null;
 }

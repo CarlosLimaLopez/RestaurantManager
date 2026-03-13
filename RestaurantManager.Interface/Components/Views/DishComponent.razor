@@ -15,10 +15,19 @@
             @if (DishDto.HasImage)
             {
                 <div Style="color: #424242 !important;">
-                    <MudIconButton 
-                        Class="mid-icon"
-                        Icon=@($"fa-solid fa-eye")
-                        OnClick="@(() => PreviewImage(DishDto))" />
+                    @if(ShowImageToolTip){
+                        <MudTooltip Text="Ver foto" @bind-Visible="_isFirstTime" Placement="Placement.Right" Arrow="true" Color="Color.Tertiary">
+                            <MudIconButton Class="mid-icon menu-eye-icon"
+                                           Icon=@($"fa-solid fa-eye")
+                                           OnClick="@(() => PreviewImage(DishDto))" />
+                        </MudTooltip>
+                    }
+                    else
+                    {
+                        <MudIconButton Class="mid-icon menu-eye-icon"
+                                       Icon=@($"fa-solid fa-eye")
+                                       OnClick="@(() => PreviewImage(DishDto))" />
+                    }
                 </div>
             }
             <div style="flex: 1 !important">
@@ -52,9 +61,12 @@
     }
 </MudGrid>
 
-@code {
+    @code {
     [Parameter, EditorRequired]
     public DishGetResponse DishDto { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public bool ShowImageToolTip { get; set; } = false;
 
     [Inject]
     private HttpClient Http { get; set; } = default!;
@@ -75,5 +87,22 @@
         };
 
         await DialogService.ShowAsync<PreviewImageDialog>(null, parameters, options);
+    }
+
+    private bool _isFirstTime;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // 1. Esperamos un pelín para que el usuario se ubique (ej. 500ms)
+            await Task.Delay(500);
+            _isFirstTime = true;
+            StateHasChanged();
+
+            // 2. Lo dejamos visible por 5 segundos
+            await Task.Delay(5000);
+            _isFirstTime = false;
+            StateHasChanged();
+        }
     }
 }
