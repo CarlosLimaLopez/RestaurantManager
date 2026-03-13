@@ -7,12 +7,14 @@
 
         <MudGrid>
             <MudItem xs="12" Class="mt-8 ml-4 mr-4 mb-8">
-                <MudText Align="Align.Center" Class="home-header-title" Style="">
-                    PRUEBA <span style="color: #388e3c;">GRATIS</span> TU CARTA EN UN CÓDIGO QR. FÁCIL Y POR WHATSAPP
-                </MudText>
+                <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+                    <MudText Align="Align.Center" Class="home-header-title" Style="">
+                        PRUEBA <span style="color: #388e3c;">GRATIS</span> TU CARTA EN UN CÓDIGO QR. FÁCIL Y POR WHATSAPP
+                    </MudText>
+                </MudContainer>
             </MudItem>
 
-            <MudItem xs="12" md="8" Class="pa-0 d-flex justify-center">
+            <MudItem xs="12" md="8" Class="d-flex justify-center">
                 <MudImage Style="width: 100%;" Src="images/home-1.png" />
             </MudItem>
 
@@ -45,9 +47,11 @@
             </MudItem>
             
             <MudItem xs="12" md="12" Class="mb-4">
-                <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
-                    MIRA LAS CARTAS DE OTROS BARES
-                </MudText>
+                <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+                    <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
+                        MIRA LAS CARTAS DE OTROS BARES
+                    </MudText>
+                </MudContainer>
             </MudItem>
 
             <MudItem xs="12" Class="pt-0">
@@ -91,6 +95,8 @@
 </MudContainer>
 
 @code{
+    private bool _isLoading = true;
+
     [Inject]
     private HttpClient Http { get; set; } = default!;
 
@@ -99,11 +105,16 @@
 
     private RestaurantSummaryGetResponse[] Restaurants { get; set; } = [];
 
-    protected override async Task OnInitializedAsync() => await ReloadGrid();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRestaurants();
+
+        _isLoading = false;
+    } 
 
     private string GetColorStyle(string? color) => $"color: {(string.IsNullOrEmpty(color) ? "inherit" : color)}";
 
-    private async Task ReloadGrid()
+    private async Task LoadRestaurants()
     {
         var result = await Http.GetFromJsonAsync<RestaurantSummaryGetResponse[]>("restaurants", CancellationToken.None);
         if (result is not null)

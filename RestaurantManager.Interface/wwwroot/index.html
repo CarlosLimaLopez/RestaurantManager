@@ -28,10 +28,146 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/app.css" />
+
+    <style>
+        /* Configuración básica para imitar MudBlazor */
+        .skeleton-provider {
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* EFECTO DE BRILLO REFORZADO */
+        .shimmer {
+            background-color: #e0e0e0;
+            background-image: linear-gradient( 90deg, #e0e0e0 0%, #e0e0e0 25%, #fdfdfd 50%, /* Brillo casi blanco para más contraste */
+            #e0e0e0 75%, #e0e0e0 100% );
+            background-size: 200% 100%;
+            animation: shine 2.2s ease-in-out infinite; /* Más rápido y fluido */
+            border-radius: 4px;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Estilos de Texto */
+        .justify-center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 48px 0; /* Simula mt-8 mb-8 */
+        }
+
+        .skeleton-text.title {
+            height: 32px; /* Grosor similar a un MudText de encabezado */
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        /* Grid System */
+        .s-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .s-col-12 {
+            width: 100%;
+        }
+
+        .s-col-md-8 {
+            width: 65%;
+        }
+
+        .s-col-md-4 {
+            width: calc(35% - 16px);
+        }
+
+        .s-col-restaurant {
+            width: calc(25% - 12px);
+        }
+
+        @media (max-width: 960px) {
+            .s-col-md-8, .s-col-md-4, .s-col-restaurant {
+                width: 100%;
+            }
+
+            .s-col-restaurant {
+                width: calc(50% - 8px);
+            }
+        }
+
+        /* Cards y Componentes */
+        .s-card {
+            border-radius: 16px;
+            box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+            height: 160px;
+        }
+
+        .fab-mock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #388e3c;
+            opacity: 0.7;
+            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.33);
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
+        <div class="skeleton-provider">
+            <div class="s-grid">
+
+                <div class="s-col-12" style="margin: 48px 0;">
+                    <div class="justify-center-content">
+                        <div class="shimmer skeleton-text title" style="width: 50%;"></div>
+                        <div class="shimmer skeleton-text title" style="width: 70%;"></div>
+                        <div class="shimmer skeleton-text title" style="width: 40%;"></div>
+                    </div>
+                </div>
+
+                <div class="s-col-md-8">
+                    <div class="shimmer" style="width: 100%; height: 200px; border-radius: 4px;"></div>
+                </div>
+
+                <div class="s-col-md-4">
+                    <div class="s-grid">
+                        <div class="s-col-12"><div class="shimmer" style="height: 120px; border-radius: 8px;"></div></div>
+                        <div class="s-col-12"><div class="shimmer" style="height: 120px; border-radius: 8px;"></div></div>
+                        <div class="s-col-12"><div class="shimmer" style="height: 120px; border-radius: 8px;"></div></div>
+                    </div>
+                </div>
+
+                <div class="s-col-12" style="margin: 48px 0;">
+                    <div class="justify-center-content">
+                        <div class="shimmer skeleton-text title" style="width: 50%;"></div>
+                        <div class="shimmer skeleton-text title" style="width: 70%;"></div>
+                        <div class="shimmer skeleton-text title" style="width: 40%;"></div>
+                    </div>
+                </div>
+
+                <div class="s-col-restaurant"><div class="s-card shimmer"></div></div>
+                <div class="s-col-restaurant"><div class="s-card shimmer"></div></div>
+                <div class="s-col-restaurant"><div class="s-card shimmer"></div></div>
+                <div class="s-col-restaurant"><div class="s-card shimmer"></div></div>
+            </div>
+
+            <div class="fab-mock"></div>
+        </div>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
