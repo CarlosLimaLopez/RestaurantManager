@@ -1,4 +1,5 @@
-﻿@using RestaurantManager.Restaurants
+﻿@using RestaurantManager.MenuSections
+@using RestaurantManager.Restaurants
 @using RestaurantManager.Interface.Components.Views
 @inject IJSRuntime JS
 
@@ -23,8 +24,15 @@ else
                 {
                     @foreach (var menuSection in RestaurantActiveMenu.ActiveMenu.Sections)
                     {
-                        <SectionComponent SectionDto="@(menuSection)"
-                        NameSectionColor="@RestaurantActiveMenu.ActiveMenu.NameSectionColor" />
+                        var sectionWithDishToolTip = false;
+
+                        if (menuSection == SectionWithDishToolTip)
+                            sectionWithDishToolTip = true;
+
+                        <SectionComponent 
+                            SectionDto="@(menuSection)"
+                            NameSectionColor="@RestaurantActiveMenu.ActiveMenu.NameSectionColor" 
+                            ShowDishImageToolTip="sectionWithDishToolTip" />
                     }
 
                     <AllergensComponent AllergensDto="@RestaurantActiveMenu.Allergens"
@@ -65,6 +73,8 @@ else
 
             foreach (var section in RestaurantActiveMenu.ActiveMenu.Sections)
                 section.Dishes = section.Dishes.OrderBy(d => d.Order).ToList();
+
+            SectionWithDishToolTip = RestaurantActiveMenu?.ActiveMenu.Sections.Where(s => s.Dishes.Any(d => d.HasImage)).FirstOrDefault();
         }
 
         StateHasChanged();
@@ -81,4 +91,7 @@ else
 
     private Task<RestaurantActiveMenuGetResponse?> GetRestaurantActiveMenu(CancellationToken cancellationToken)
         => Http.GetFromJsonAsync<RestaurantActiveMenuGetResponse>($"restaurants/{RestauranteName}/active-menu", cancellationToken);
+
+
+    private MenuSectionGetResponse? SectionWithDishToolTip = null;
 }
