@@ -6,77 +6,83 @@
 @using RestaurantManager.Interface.Components.Dialogs
 @using RestaurantManager.Interface.Components.Editors
 @inject IDialogService DialogService
+@inject IJSRuntime JS
 
-<MudContainer Class="pa-8" MaxWidth="MaxWidth.Large" Style="background-color: white">
-    @if (Restaurant != null)
-    {
-        <PageTitle>@Restaurant.Name - Administración</PageTitle>
+@if (_isLoading)
+{
+}
+else
+{
+    <MudContainer Class="pa-8 fade-in" MaxWidth="MaxWidth.Large" Style="background-color: white">
+        @if (Restaurant != null)
+        {
+            <PageTitle>@Restaurant.Name - Administración</PageTitle>
 
-        <HeadContent>
-            <link rel="icon" href="@Restaurant.LogoPath" />
-        </HeadContent>
+            <HeadContent>
+                <link rel="icon" href="@Restaurant.LogoPath" />
+            </HeadContent>
 
-        <MudGrid>
+            <MudGrid>
 
-            <MudItem xs="8" sm="9">
-                <MudText Class="restaurant-name">
-                    @Restaurant.Name
-                </MudText>
-
-                @if (!string.IsNullOrWhiteSpace(@Restaurant.Description))
-                {
-                    <MudText Class="restaurant-description" >
-                        @Restaurant.Description
+                <MudItem xs="8" sm="9">
+                    <MudText Class="restaurant-name">
+                        @Restaurant.Name
                     </MudText>
-                }
-            </MudItem>
 
-            @if (!string.IsNullOrWhiteSpace(Restaurant.LogoPath))
-            {
-                <MudItem xs="4" sm="3" Class="d-flex justify-center justify-sm-end">
-                    <MudImage Src="@Restaurant.LogoPath" Class="logo" />
-                </MudItem>
-            }
-
-            <MudItem xs="6">
-                <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center">
-                    @if (Restaurant?.Menus.Any() == true)
+                    @if (!string.IsNullOrWhiteSpace(@Restaurant.Description))
                     {
-                        <MudSelect T="DateOnly"
-                                    Class="custom-select"
-                                    FitContent="true"
-                                    Variant="Variant.Filled"
-                                    Margin="Margin.Dense"
-                                    @bind-Value="SelectedDate">
-                            @foreach (var menu in Restaurant.Menus)
-                            {
-                                <MudSelectItem T="DateOnly" Value="menu.ActivateAt">@menu.ActivateAt.ToString("dd/MM/yyyy")</MudSelectItem>
-                            }
-                        </MudSelect>
+                        <MudText Class="restaurant-description" >
+                            @Restaurant.Description
+                        </MudText>
                     }
-                    <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-plus") OnClick="@(() => OpenCreateRestaurantDialog())" />
-                    <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-clone") OnClick="@(() => OpenDuplicateMenuDialog())" />
-                </MudStack>
-            </MudItem>
+                </MudItem>
 
-            <MudItem xs="6" Style="padding-left: 0px !important;">
-                <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
-                    <MudText>
-                        Histórico de menús
-                    </MudText>
-                </MudStack>
-            </MudItem>
-
-            <MudItem xs="12" Class="pt-0">
-                @if (Restaurant?.Menus.Any() == true && SelectedMenu != null)
+                @if (!string.IsNullOrWhiteSpace(Restaurant.LogoPath))
                 {
-                    <MenuEditor MenuDto="@SelectedMenu" OnReloadRequired="@ReloadRestaurant" />
+                    <MudItem xs="4" sm="3" Class="d-flex justify-center justify-sm-end">
+                        <MudImage Src="@Restaurant.LogoPath" Class="logo" />
+                    </MudItem>
                 }
-            </MudItem>
-        </MudGrid>                
-    }
-</MudContainer>
 
+                <MudItem xs="6">
+                    <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center">
+                        @if (Restaurant?.Menus.Any() == true)
+                        {
+                            <MudSelect T="DateOnly"
+                            Class="custom-select"
+                            FitContent="true"
+                            Variant="Variant.Filled"
+                            Margin="Margin.Dense"
+                            @bind-Value="SelectedDate">
+                                @foreach (var menu in Restaurant.Menus)
+                                {
+                                    <MudSelectItem T="DateOnly" Value="menu.ActivateAt">@menu.ActivateAt.ToString("dd/MM/yyyy")</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-plus") OnClick="@(() => OpenCreateRestaurantDialog())" />
+                        <MudIconButton Size="Size.Small" Icon=@($"fa-solid fa-clone") OnClick="@(() => OpenDuplicateMenuDialog())" />
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="6" Style="padding-left: 0px !important;">
+                    <MudStack Row="true" Class="historic-menu-label" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
+                        <MudText>
+                            Histórico de menús
+                        </MudText>
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="12" Class="pt-0">
+                    @if (Restaurant?.Menus.Any() == true && SelectedMenu != null)
+                    {
+                        <MenuEditor MenuDto="@SelectedMenu" OnReloadRequired="@ReloadRestaurant" />
+                    }
+                </MudItem>
+            </MudGrid>                
+        }
+        </MudContainer>
+}
 @code {
     [Inject]
     private HttpClient Http { get; set; } = default!;
@@ -86,9 +92,17 @@
 
     public RestaurantGetResponse? Restaurant { get; set; }
 
+    private bool _isLoading = true;
+
     protected override async Task OnInitializedAsync()
     {
         await ReloadRestaurant();
+
+        await Task.Delay(1000);
+
+        await JS.InvokeVoidAsync("eval", "document.getElementById('initial-skeleton')?.remove()");
+
+        _isLoading = false;
     }
 
     private async Task ReloadRestaurant()
