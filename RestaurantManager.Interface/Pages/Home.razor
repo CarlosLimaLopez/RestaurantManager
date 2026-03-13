@@ -1,98 +1,106 @@
 ﻿@page "/"
+@using RestaurantManager.Interface.Components
 @using RestaurantManager.Restaurants
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-2 pa-0">
+@if (_isLoading)
+{
+    <HomeSkeletonLoader />
+}
+else {
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-2 pa-0">
 
-    <MudPaper Elevation="0" Class="home-pricing-bar pa-xs-0 pa-md-6" Style="background-color: transparent;">
+        <MudPaper Elevation="0" Class="home-pricing-bar pa-xs-0 pa-md-6" Style="background-color: transparent;">
 
-        <MudGrid>
-            <MudItem xs="12" Class="mt-8 ml-4 mr-4 mb-8">
-                <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-                    <MudText Align="Align.Center" Class="home-header-title" Style="">
-                        PRUEBA <span style="color: #388e3c;">GRATIS</span> TU CARTA EN UN CÓDIGO QR. FÁCIL Y POR WHATSAPP
-                    </MudText>
-                </MudContainer>
-            </MudItem>
+            <MudGrid>
+                <MudItem xs="12" Class="mt-8 ml-4 mr-4">
+                    <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+                        <MudText Align="Align.Center" Class="home-header-title" Style="">
+                            PRUEBA <span style="color: #388e3c;">GRATIS</span> TU CARTA EN UN CÓDIGO QR. FÁCIL Y POR WHATSAPP
+                        </MudText>
+                    </MudContainer>
+                </MudItem>
 
-            <MudItem xs="12" md="8" Class="d-flex justify-center">
-                <MudImage Style="width: 100%;" Src="images/home-1.png" />
-            </MudItem>
+                <MudItem xs="12" md="8" Class="d-flex justify-center">
+                    <MudImage Style="width: 100%;" Src="images/home-1.png" />
+                </MudItem>
 
-            <MudItem xs="12" md="4" Class="pt-xs-0">
-                <MudGrid Class="pa-4">
-                    <MudItem xs="12">
-                        <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
-                            <MudText Class="home-card-label">Paso 1</MudText>
-                            <MudText Class="home-card-body" Style="color: #ff8935;">ENVÍANOS TU CARTA</MudText>
-                            <MudText Class="home-card-note">Mándonos una foto de tu carta a través de WhatsApp y te hacemos un boceto. Sin registros ni tener que crear una cuenta.</MudText>
-                        </MudStack>
-                    </MudItem>
-
-                    <MudItem xs="12">
-                        <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
-                            <MudText Class="home-card-label">Paso 2</MudText>
-                            <MudText Class="home-card-body" Style="color: #388e3c;">PRUEBA 1 MES GRATIS</MudText>
-                            <MudText Class="home-card-note">Te enviamos las pegatinas QR con tu carta digital. Pruebalo en tu local durante un mes gratis y sin compromiso.</MudText>
-                        </MudStack>
-                    </MudItem>
-
-                    <MudItem xs="12">
-                        <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
-                            <MudText Class="home-card-label">Paso 3</MudText>
-                            <MudText Class="home-card-body" Style="color: #bfa14a;">CONTRATA 1 AÑO</MudText>
-                            <MudText Class="home-card-note">Si te gusta nuestro servicio, formalizamos un contrato de 1 año por 200€ con modificaciones de carta incluidas.</MudText>
-                        </MudStack>
-                    </MudItem>
-                </MudGrid>
-            </MudItem>
-            
-            <MudItem xs="12" md="12" Class="mb-4">
-                <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-                    <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
-                        MIRA LAS CARTAS DE OTROS BARES
-                    </MudText>
-                </MudContainer>
-            </MudItem>
-
-            <MudItem xs="12" Class="pt-0">
-                <MudGrid Class="pa-4">
-                    @foreach (var restaurant in Restaurants.Where(r => r.Public))
-                    {
-                        <MudItem xs="6" md="3">
-                            <NavLink href="@($"/{restaurant.Path}")" Style="text-decoration: none;">
-                                <MudCard Class="d-flex flex-column align-center restaurant-card"
-                                         Style="height: 100%; border-radius: 16px;"
-                                         Elevation="2">
-                                    <MudCardContent Class="d-flex flex-column align-center justify-center flex-grow-1">
-                                        @if (!string.IsNullOrEmpty(restaurant.LogoPath))
-                                        {
-                                            <MudImage Src="@restaurant.LogoPath" Alt="@restaurant.Name" Class="rounded mb-3 logo" Width="100" Height="100" ObjectFit="ObjectFit.Contain" />
-                                        }
-                                        else
-                                        {
-                                            <MudIcon Icon="@Icons.Material.Filled.Restaurant" Size="Size.Large" Class="mb-3" Style="font-size: 100px; color: var(--color-primary);" />
-                                        }
-                                        <MudText Typo="Typo.h6" Align="Align.Center" Style="@GetColorStyle(restaurant.NameColor)">
-                                            @restaurant.Name
-                                        </MudText>
-                                    </MudCardContent>
-                                </MudCard>
-                            </NavLink>
+                <MudItem xs="12" md="4" Class="pt-xs-0">
+                    <MudGrid Class="pa-4">
+                        <MudItem xs="12">
+                            <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
+                                <MudText Class="home-card-label">Paso 1</MudText>
+                                <MudText Class="home-card-body" Style="color: #ff8935;">ENVÍANOS TU CARTA</MudText>
+                                <MudText Class="home-card-note">Mándonos una foto de tu carta a través de WhatsApp y te hacemos un boceto. Sin registros ni tener que crear una cuenta.</MudText>
+                            </MudStack>
                         </MudItem>
-                    }
-                </MudGrid>
-            </MudItem>
-        </MudGrid>
 
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Success"
-                   Class="whatsapp-fab"
-                   Style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 16px #16a34a55;"
-                   Href="https://wa.me/614977276" Target="_blank">
-            <MudIcon Icon="@Icons.Custom.Brands.WhatsApp" Size="Size.Large" />
-        </MudButton>
-    </MudPaper>    
-</MudContainer>
+                        <MudItem xs="12">
+                            <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
+                                <MudText Class="home-card-label">Paso 2</MudText>
+                                <MudText Class="home-card-body" Style="color: #388e3c;">PRUEBA 1 MES GRATIS</MudText>
+                                <MudText Class="home-card-note">Te enviamos las pegatinas QR con tu carta digital. Pruebalo en tu local durante un mes gratis y sin compromiso.</MudText>
+                            </MudStack>
+                        </MudItem>
+
+                        <MudItem xs="12">
+                            <MudStack AlignItems="AlignItems.Center" Spacing="1" Class="pa-4 home-card">
+                                <MudText Class="home-card-label">Paso 3</MudText>
+                                <MudText Class="home-card-body" Style="color: #bfa14a;">CONTRATA 1 AÑO</MudText>
+                                <MudText Class="home-card-note">Si te gusta nuestro servicio, formalizamos un contrato de 1 año por 200€ con modificaciones de carta incluidas.</MudText>
+                            </MudStack>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+
+                <MudItem xs="12" md="12" Class="mb-4">
+                    <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+                        <MudText Align="Align.Center" Class="home-header-title" Style="letter-spacing: 1px; color: #1a2936;">
+                            MIRA LAS CARTAS DE OTROS BARES
+                        </MudText>
+                    </MudContainer>
+                </MudItem>
+
+                <MudItem xs="12" Class="pt-0">
+                    <MudGrid Class="pa-4">
+                        @foreach (var restaurant in Restaurants.Where(r => r.Public))
+                        {
+                            <MudItem xs="6" md="3">
+                                <NavLink href="@($"/{restaurant.Path}")" Style="text-decoration: none;">
+                                    <MudCard Class="d-flex flex-column align-center restaurant-card"
+                                             Style="height: 100%; border-radius: 16px;"
+                                             Elevation="2">
+                                        <MudCardContent Class="d-flex flex-column align-center justify-center flex-grow-1">
+                                            @if (!string.IsNullOrEmpty(restaurant.LogoPath))
+                                            {
+                                                <MudImage Src="@restaurant.LogoPath" Alt="@restaurant.Name" Class="rounded mb-3 logo" Width="100" Height="100" ObjectFit="ObjectFit.Contain" />
+                                            }
+                                            else
+                                            {
+                                                <MudIcon Icon="@Icons.Material.Filled.Restaurant" Size="Size.Large" Class="mb-3" Style="font-size: 100px; color: var(--color-primary);" />
+                                            }
+                                            <MudText Typo="Typo.h6" Align="Align.Center" Style="@GetColorStyle(restaurant.NameColor)">
+                                                @restaurant.Name
+                                            </MudText>
+                                        </MudCardContent>
+                                    </MudCard>
+                                </NavLink>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Success"
+                       Class="whatsapp-fab"
+                       Style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 16px #16a34a55;"
+                       Href="https://wa.me/614977276" Target="_blank">
+                <MudIcon Icon="@Icons.Custom.Brands.WhatsApp" Size="Size.Large" />
+            </MudButton>
+        </MudPaper>
+    </MudContainer>
+}
+
 
 @code{
     private bool _isLoading = true;
@@ -105,13 +113,6 @@
 
     private RestaurantSummaryGetResponse[] Restaurants { get; set; } = [];
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadRestaurants();
-
-        _isLoading = false;
-    } 
-
     private string GetColorStyle(string? color) => $"color: {(string.IsNullOrEmpty(color) ? "inherit" : color)}";
 
     private async Task LoadRestaurants()
@@ -119,5 +120,19 @@
         var result = await Http.GetFromJsonAsync<RestaurantSummaryGetResponse[]>("restaurants", CancellationToken.None);
         if (result is not null)
             Restaurants = result;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadRestaurants();
+
+            await Task.Delay(100);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 }
