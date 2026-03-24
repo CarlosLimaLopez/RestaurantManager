@@ -1,0 +1,103 @@
+﻿@page "/login"
+@using RestaurantManager.Auth
+@using System.Net.Http.Headers
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Carta QR - Iniciar Sesión</PageTitle>
+
+@if (_isLoading)
+{
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Small" Class="fade-in">
+        Hola
+        <MudPaper Class="pa-8" Elevation="0">
+
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="12">
+                    <MudForm>
+                        <MudTextField @bind-Value="userName"
+                        Label="Usuario"
+                        Required="true"
+                        Variant="Variant.Outlined"
+                        Margin="Margin.Normal"
+                        Placeholder="Inserta tu usuario"
+                        FullWidth="true" />
+
+                        <MudTextField @bind-Value="passWord"
+                        Label="Contraseña"
+                        InputType="InputType.Password"
+                        Required="true"
+                        Variant="Variant.Outlined"
+                        Margin="Margin.Normal"
+                        Placeholder="Inserta tu contraseña"
+                        FullWidth="true" />
+
+                        <MudButton ButtonType="ButtonType.Button"
+                        Variant="Variant.Filled"
+                        Color="Color.Primary"
+                        FullWidth="true"
+                        Size="Size.Large"
+                        Class="mt-4"
+                        OnClick="HandleLogin">
+                            Iniciar Sesión
+                        </MudButton>
+                    </MudForm>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
+}
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    private bool _isLoading = true;
+
+    private string userName { get; set; } = string.Empty;
+    private string passWord { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await AuthService.IsAuthenticatedAsync())
+        {
+            var returnUrl = GetReturnUrl();
+            Navigation.NavigateTo(returnUrl);
+        }
+
+        await Task.Delay(1000);
+
+        await JS.InvokeVoidAsync("eval", "document.getElementById('initial-skeleton')?.remove()");
+
+        _isLoading = false;
+
+        StateHasChanged();
+    }
+
+    private async Task HandleLogin()
+    {
+        var success = await AuthService.LoginAsync(userName, passWord);
+
+        if (success)
+        {
+            var returnUrl = GetReturnUrl();
+            Navigation.NavigateTo(returnUrl);
+        }
+        else
+            Navigation.NavigateTo("/");
+    }
+
+    private string GetReturnUrl()
+    {
+        var uri = new Uri(Navigation.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        if (query.TryGetValue("returnUrl", out var returnUrl) && !string.IsNullOrEmpty(returnUrl))
+            return returnUrl!;
+        
+        return "/admin";
+    }
+}

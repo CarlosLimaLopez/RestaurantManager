@@ -1,5 +1,6 @@
 ﻿@page "/admin/restaurants/{RestaurantId:guid}"
 
+@using RestaurantManager.Auth
 @using RestaurantManager.Menus
 @using RestaurantManager.Restaurants
 @using RestaurantManager.Interface.Components
@@ -7,6 +8,8 @@
 @using RestaurantManager.Interface.Components.Editors
 @inject IDialogService DialogService
 @inject IJSRuntime JS
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
 
 @if (_isLoading)
 {
@@ -96,6 +99,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        if (!await AuthService.IsAuthenticatedAsync())
+        {
+            Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+            return;
+        }
+
         await ReloadRestaurant();
 
         await Task.Delay(1000);

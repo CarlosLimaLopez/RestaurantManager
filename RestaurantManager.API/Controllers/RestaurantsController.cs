@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantManager.Restaurants
 {
@@ -29,6 +30,7 @@ namespace RestaurantManager.Restaurants
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateRestaurant([FromBody] Restaurant restaurant)
         {
             await _restaurantService.TryCreateRestaurant(restaurant);
@@ -55,6 +57,7 @@ namespace RestaurantManager.Restaurants
         }
 
         [HttpPost("{restaurantId:guid}/menu")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateRestaurantMenu([FromRoute] Guid restaurantId, [FromBody] Menu menu)
         {
             await _restaurantService.TryAddMenuToRestaurant(restaurantId, menu);
@@ -63,6 +66,7 @@ namespace RestaurantManager.Restaurants
         }
 
         [HttpPost("{restaurantId:guid}/menu/{menuId:guid}/duplicate")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DuplicateMenuToDate(
             [FromRoute] Guid restaurantId,
             [FromRoute] Guid menuId,
@@ -89,6 +93,7 @@ namespace RestaurantManager.Restaurants
         }
 
         [HttpPut("{restaurantId:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateRestaurant(
             [FromRoute] Guid restaurantId,
             [FromBody] Restaurant updateRestaurant)
@@ -99,6 +104,7 @@ namespace RestaurantManager.Restaurants
         }
 
         [HttpDelete("{restaurantId:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> RemoveRestaurant(
             [FromRoute] Guid restaurantId)
         {

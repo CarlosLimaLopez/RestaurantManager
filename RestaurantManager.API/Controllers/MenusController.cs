@@ -3,9 +3,11 @@
 namespace RestaurantManager.Menus
 {
     using MenuSections;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class MenusController : ControllerBase
     {
         private readonly IMenuService _menuService;

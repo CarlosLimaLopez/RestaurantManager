@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantManager.Dishes;
 
 namespace RestaurantManager.MenuSections
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class MenuSectionsController : ControllerBase
     {
         private readonly IMenuSectionService _menuSectionService;
