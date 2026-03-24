@@ -16,7 +16,7 @@
             {
                 <div Style="color: #424242 !important;">
                     @if(ShowImageToolTip){
-                        <MudTooltip Text="Ver foto" @bind-Visible="_isFirstTime" Placement="Placement.Right" Arrow="true" Color="Color.Tertiary">
+                        <MudTooltip Text="Ver foto" @bind-Visible="_isFirstTime" Placement="Placement.Right" Arrow="true" Color="Color.Tertiary" ShowOnClick="false">
                             <MudIconButton Class="mid-icon menu-eye-icon"
                                            Icon=@($"fa-solid fa-eye")
                                            OnClick="@(() => PreviewImage(DishDto))" />
