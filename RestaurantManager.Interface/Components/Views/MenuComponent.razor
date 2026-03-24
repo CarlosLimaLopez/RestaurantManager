@@ -81,11 +81,11 @@ else
 
         if (RestaurantActiveMenu != null)
         {
-            await Task.Delay(2000);
-
-            await JS.InvokeVoidAsync("eval", "document.getElementById('initial-skeleton')?.remove()");
-
             _isLoading = false;
+
+            StateHasChanged();
+
+            await JS.InvokeVoidAsync("eval", "document.getElementById('initial-skeleton')?.remove()");            
         }
     }
 

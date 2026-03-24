@@ -3,8 +3,11 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
+@using RestaurantManager.Auth
+@using RestaurantManager.Interface.Components.Buttons
 @using RestaurantManager.Restaurants
 @using RestaurantManager.Interface.Components
+@inject IAuthService AuthService
 
 <PageTitle>Carta QR - Administración</PageTitle>
 
@@ -102,12 +105,15 @@ else
                         </MudStack>
                     </CellTemplate>
                 </TemplateColumn>
+                
 
                 <PropertyColumn Property="x => x.Id" Hidden="true" />
             </Columns>
 
         </MudDataGrid>
     </MudContainer>
+
+    <LogoutButton/>
 }
 
 
@@ -121,6 +127,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        if (!await AuthService.IsAuthenticatedAsync())
+        {
+            Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+            return;
+        }
+
         await ReloadGrid();
 
         await Task.Delay(1000);

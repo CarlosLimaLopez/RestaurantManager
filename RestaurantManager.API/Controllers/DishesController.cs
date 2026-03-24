@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantManager.Restaurants;
 using RestaurantManager.Services;
 
@@ -16,6 +17,7 @@ namespace RestaurantManager.Dishes
         }
 
         [HttpPut("{dishId:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateDish(
             [FromRoute] Guid dishId,
             [FromBody] Dish dish)
@@ -26,6 +28,7 @@ namespace RestaurantManager.Dishes
         }
 
         [HttpDelete("{dishId:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> RemoveDish([FromRoute] Guid dishId)
         {
             await _dishService.TryRemoveDish(dishId);
@@ -34,6 +37,7 @@ namespace RestaurantManager.Dishes
         }
 
         [HttpPost("{dishId:guid}/image")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<object>> AddDishImage([FromRoute] Guid dishId, IFormFile file)
         {
             var (dish, errors) = await _dishService.TryAddImage(dishId, file);
@@ -60,6 +64,7 @@ namespace RestaurantManager.Dishes
         }
 
         [HttpDelete("{dishId:guid}/image")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteDishImage([FromRoute] Guid dishId)
         {
             var (dish, errors) = await _dishService.TryRemoveImage(dishId);

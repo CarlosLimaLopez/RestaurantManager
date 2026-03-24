@@ -1,0 +1,20 @@
+﻿@using RestaurantManager.Auth
+
+@inject NavigationManager Navigation
+@inject IAuthService AuthService
+
+<MudFab Style="position: fixed; bottom: 20px; right: 20px; z-index: 100;"
+        Color="Color.Error"
+        StartIcon="fa-solid fa-door-open"
+        Size="Size.Medium"
+        OnClick="Logout" />
+
+
+@code {
+    private async Task Logout()
+    {
+        await AuthService.LogoutAsync();
+        
+        Navigation.NavigateTo("/login");
+    }
+}

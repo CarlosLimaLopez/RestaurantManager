@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using RestaurantManager.Interface;
+using RestaurantManager.Auth;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,6 +18,8 @@ var apiBaseAddress = restaurantManagerApiAddress.StartsWith("/")
     : new Uri(restaurantManagerApiAddress);
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = apiBaseAddress });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddMudServices();
 
