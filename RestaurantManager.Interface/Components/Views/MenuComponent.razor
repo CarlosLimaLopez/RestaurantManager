@@ -8,7 +8,7 @@
 }
 else
 {
-    <div class="fade-in">
+    <div class="">
         <MudPaper Elevation="0" Class="pa-2 pa-sm-8">
             @if (RestaurantActiveMenu != null)
             {
@@ -85,7 +85,14 @@ else
 
             StateHasChanged();
 
-            await JS.InvokeVoidAsync("eval", "document.getElementById('initial-skeleton')?.remove()");            
+            await JS.InvokeVoidAsync("eval", @"
+                var skeleton = document.getElementById('initial-skeleton');
+                if (skeleton) {
+                    skeleton.style.transition = 'opacity 0.5s ease';
+                    skeleton.style.opacity = '0';
+                    setTimeout(function() { skeleton.remove(); }, 500);
+                }
+            ");            
         }
     }
 
